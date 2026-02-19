@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Service by Snoopy</title>
+    <style>
+        body {
+            background-color: #0a0a0a;
+            /* Шлях до твого фону */
+            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+
+        .container {
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            padding: 50px;
+            border-radius: 25px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            max-width: 600px;
+        }
+
+        /* Синій неон для заголовка */
+        h1 {
+            color: #00d4ff;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #00d4ff, 0 0 20px rgba(0, 212, 255, 0.5);
+            animation: neon-simple 3s infinite alternate;
+        }
+
+        @keyframes neon-simple {
+            from { text-shadow: 0 0 10px #00d4ff, 0 0 20px rgba(0, 212, 255, 0.3); }
+            to { text-shadow: 0 0 15px #00d4ff, 0 0 30px rgba(0, 212, 255, 0.6); }
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #ccc;
+            margin-bottom: 30px;
+        }
+
+        /* Зелена кнопка-посилання */
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: transparent;
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 50px;
+            transition: 0.4s;
+            animation: pulse-green 2s infinite;
+        }
+
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 10px #00ff00; }
+            50% { box-shadow: 0 0 25px #00ff00; }
+            100% { box-shadow: 0 0 10px #00ff00; }
+        }
+
+        .btn:hover {
+            background: #00ff00;
+            color: #000;
+            box-shadow: 0 0 40px #00ff00;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Service by Snoopy</h1>
+        <p>Професійний ремонт та апгрейд ПК</p>
+        
+        <a href="services.html" class="btn">WELCOME</a>
+    </div>
+
+</body>
+</html>
