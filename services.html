@@ -28,16 +28,10 @@
         .service-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .price { color: #00ff00; font-family: 'Orbitron', sans-serif; font-weight: bold; }
 
-        /* Галерея */
         .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .work-img { 
-            width: 100%; height: 160px; object-fit: cover; 
-            border-radius: 12px; border: 1px solid #444; 
-            cursor: pointer; transition: 0.3s; 
-        }
-        .work-img:hover { border-color: #ff9100; transform: scale(1.03); }
+        .work-img { width: 100%; height: 160px; object-fit: cover; border-radius: 12px; border: 1px solid #444; cursor: pointer; transition: 0.3s; }
         
-        #imgModal { display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; backdrop-filter: blur(8px); cursor: zoom-out; }
+        #imgModal { display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; backdrop-filter: blur(8px); }
         #imgModal img { max-width: 90%; max-height: 90%; border: 2px solid #ff9100; border-radius: 10px; }
 
         .btn-group { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 400px; margin-top: 25px; }
@@ -45,7 +39,6 @@
         .back-btn { color: #ff9100; border-color: #ff9100; }
         .game-btn { color: #ff0055; border-color: #ff0055; }
 
-        /* Ігровий рушій */
         #game-section { display: none; margin-top: 20px; width: 320px; height: 400px; background: #000; border: 2px solid #ff0055; border-radius: 20px; position: relative; overflow: hidden; touch-action: none; }
         #gameCanvas { width: 100%; height: 100%; background: radial-gradient(circle, #111, #000); }
         #score { position: absolute; top: 10px; left: 15px; color: #00ff00; font-family: 'Orbitron', sans-serif; z-index: 10; }
@@ -74,10 +67,9 @@
             <h2>Портфоліо</h2>
             <div class="gallery">
                 <img src="phot01.jpg" class="work-img" onclick="showImg(this.src)">
-                <img src="phot02.jpg" class="work-img" onclick="showImg(this.src)" 
-                     onerror="this.onerror=null; this.src='PHOTO2.JPG';">
+                <img src="phot02.jpg" class="work-img" id="targetPhoto" onclick="showImg(this.src)" 
+                     onerror="tryNextSource(this)">
             </div>
-            <p style="font-size: 0.7rem; color: #777; margin-top: 10px;">Натисніть для збільшення</p>
         </div>
     </div>
 
@@ -97,6 +89,16 @@
     </audio>
 
     <script>
+        // Функція для пошуку фото, якщо назва phot02.jpg не спрацювала
+        let sources = ['PHOTO2.JPG', 'photo2.jpg', 'phot02.JPG', 'photo02.jpg'];
+        let currentIdx = 0;
+        function tryNextSource(img) {
+            if (currentIdx < sources.length) {
+                img.src = sources[currentIdx];
+                currentIdx++;
+            }
+        }
+
         function showImg(src) { document.getElementById('fullImg').src = src; document.getElementById('imgModal').style.display = 'flex'; }
         
         function updateClock() {
@@ -130,13 +132,33 @@
         function gameLoop() {
             if(!active) return;
             ctx.clearRect(0, 0, 320, 400);
-            if(Math.random() < 0.035) items.push({ x: Math.random()*290, y: -20, bad: Math.random() < 0.2 });
-            
+            if(Math.random() < 0.03) items.push({ x: Math.random()*290, y: -20, bad: Math.random() < 0.2 });
             ctx.fillStyle = "#ff9100";
             ctx.fillRect(basket.x, 375, basket.w, 10);
-
             for(let i = items.length - 1; i >= 0; i--) {
                 let it = items[i];
                 it.y += (3.5 + (score * 0.05));
                 ctx.font = "24px Arial";
-                ctx.fillText(it.bad ? "👾"
+                ctx.fillText(it.bad ? "👾" : "⚙️", it.x, it.y);
+                if(it.y > 365 && it.y < 385 && it.x > basket.x - 10 && it.x < basket.x + basket.w) {
+                    if(it.bad) { alert("BOOM! SCORE: " + score); toggleGame(); return; }
+                    else { score++; scoreEl.innerText = "SCORE: " + score; items.splice(i, 1); continue; }
+                }
+                if(it.y > 410) items.splice(i, 1);
+            }
+            requestAnimationFrame(gameLoop);
+        }
+
+        function move(clientX) {
+            let rect = cvs.getBoundingClientRect();
+            let x = clientX - rect.left - basket.w/2;
+            basket.x = Math.max(0, Math.min(320 - basket.w, x));
+        }
+
+        window.addEventListener('mousemove', e => { if(active) move(e.clientX); });
+        cvs.addEventListener('touchmove', e => {
+            if(active) { move(e.touches[0].clientX); e.preventDefault(); }
+        }, {passive: false});
+    </script>
+</body>
+</html>
