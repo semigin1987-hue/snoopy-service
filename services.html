@@ -23,6 +23,7 @@
             min-height: 100vh;
         }
 
+        /* ГОЛОВНИЙ ЛОГО ТА ГОДИННИК */
         .header-left {
             align-self: flex-start;
             margin-bottom: 30px;
@@ -66,12 +67,50 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         .price-container { flex: 2; min-width: 300px; }
-        .photo-aside { flex: 1; min-width: 250px; }
+        .photo-aside { flex: 1; min-width: 250px; text-align: center; }
 
         h2 { font-family: 'Orbitron', sans-serif; color: #ff9100; text-transform: uppercase; font-size: 1.2rem; margin-top: 0; }
         .service-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .price { font-family: 'Orbitron', sans-serif; color: #00ff00; font-weight: bold; text-shadow: 0 0 8px rgba(0, 255, 0, 0.4); }
+
+        /* ФОТО ТА ЕФЕКТИ */
+        .work-img {
+            width: 100%;
+            border-radius: 15px;
+            border: 1px solid #333;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .work-img:hover {
+            transform: scale(1.03);
+            border-color: #ff9100;
+            box-shadow: 0 0 15px rgba(255, 145, 0, 0.4);
+        }
+
+        /* МОДАЛЬНЕ ВІКНО */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            align-items: center;
+            justify-content: center;
+            cursor: zoom-out;
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            border: 2px solid #ff9100;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(255, 145, 0, 0.6);
+        }
         
+        /* КНОПКИ ТА ГРА */
         .btn-row { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 400px; margin-top: 30px; }
         .back-btn, .game-toggle-btn {
             padding: 15px; text-decoration: none; border-radius: 50px; font-family: 'Orbitron', sans-serif;
@@ -97,6 +136,10 @@
 </head>
 <body>
 
+    <div id="imgModal" class="modal" onclick="this.style.display='none'">
+        <img class="modal-content" id="fullImg">
+    </div>
+
     <div class="header-left">
         <div class="neon-logo">Service by Snoopy</div>
         <div id="live-clock" class="clock">Завантаження...</div>
@@ -110,9 +153,11 @@
             <div class="service-item"><span>Windows + Soft</span> <span class="price">650 ₴</span></div>
             <div class="service-item"><span>Виїзд</span> <span class="price">від 500 ₴</span></div>
         </div>
+        
         <div class="photo-aside">
             <h2>Work</h2>
-            <img src="phot01.jpg" alt="Work" style="width: 100%; border-radius: 15px; border: 1px solid #333;">
+            <img src="phot01.jpg" alt="Work" class="work-img" onclick="openModal(this.src)">
+            <p style="font-size: 0.7rem; color: #666; margin-top: 10px;">(натисніть для збільшення)</p>
         </div>
     </div>
 
@@ -133,92 +178,4 @@
     <button class="mute-btn" onclick="toggleMute()">🔊</button>
 
     <script>
-        // ГОДИННИК
-        function updateClock() {
-            const now = new Date();
-            const dateStr = now.toLocaleDateString('uk-UA');
-            const timeStr = now.toLocaleTimeString('uk-UA');
-            document.getElementById('live-clock').innerText = dateStr + ' | ' + timeStr;
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-
-        // ЛОГІКА ГРИ
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const gameSection = document.getElementById('game-section');
-        const music = document.getElementById('bg-music');
-        let gameActive = false, score = 0, items = [];
-        let basket = { x: 0, y: 0, w: 70, h: 10 };
-
-        music.volume = 0.3;
-
-        function toggleGame() {
-            gameActive = !gameActive;
-            gameSection.style.display = gameActive ? 'block' : 'none';
-            if (gameActive) {
-                if (music.paused) music.play().catch(e => console.log("Music play blocked"));
-                resize();
-                reset();
-                setTimeout(() => gameSection.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
-                requestAnimationFrame(loop);
-            }
-        }
-
-        function toggleMute() {
-            music.muted = !music.muted;
-            document.querySelector('.mute-btn').innerText = music.muted ? '🔇' : '🔊';
-        }
-
-        function resize() {
-            canvas.width = gameSection.offsetWidth;
-            canvas.height = gameSection.offsetHeight;
-            basket.y = canvas.height - 30;
-            basket.x = canvas.width / 2 - 35;
-        }
-
-        function reset() { score = 0; items = []; updateScore(); }
-        function updateScore() { document.getElementById('score-board').innerText = 'SCORE: ' + score; }
-
-        function loop() {
-            if (!gameActive) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            if (Math.random() < 0.03) items.push({ x: Math.random()*(canvas.width-20), y: -20, v: Math.random()<0.3 });
-            
-            ctx.fillStyle = '#ff9100';
-            ctx.fillRect(basket.x, basket.y, basket.w, basket.h);
-
-            items.forEach((item, i) => {
-                item.y += 4;
-                ctx.font = '24px Arial';
-                ctx.fillText(item.v ? '👾' : '⚙️', item.x, item.y);
-                
-                if (item.y > basket.y - 15 && item.y < basket.y + 10 && item.x > basket.x - 10 && item.x < basket.x + basket.w) {
-                    if (item.v) { 
-                        alert('GAME OVER! Score: ' + score); 
-                        toggleGame(); 
-                    } else { 
-                        score++; 
-                        updateScore(); 
-                        items.splice(i, 1); 
-                    }
-                }
-                if (item.y > canvas.height) items.splice(i, 1);
-            });
-            requestAnimationFrame(loop);
-        }
-
-        function move(e) {
-            const rect = canvas.getBoundingClientRect();
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const x = clientX - rect.left;
-            basket.x = Math.max(0, Math.min(canvas.width - basket.w, x - basket.w/2));
-        }
-
-        gameSection.addEventListener('mousemove', move);
-        gameSection.addEventListener('touchmove', (e) => { move(e); e.preventDefault(); }, {passive: false});
-        window.onresize = resize;
-    </script>
-</body>
-</html>
+        //
