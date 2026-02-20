@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+в<!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snoopy Service - Послуги та Ціни</title>
+    <title>Snoopy Service - Послуги</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
@@ -22,6 +22,7 @@
             align-items: center;
             min-height: 100vh;
             padding: 20px;
+            overflow-x: hidden;
         }
 
         .container {
@@ -33,19 +34,15 @@
             backdrop-filter: blur(20px);
             padding: 30px;
             box-shadow: 0 0 50px rgba(0, 0, 0, 1);
-            animation: slideUp 0.6s ease-out;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            position: relative;
+            z-index: 2;
         }
 
         h2 {
             text-align: center;
             text-transform: uppercase;
             letter-spacing: 5px;
-            color: #a020f0; /* Темно-сиреневый */
+            color: #a020f0;
             margin-bottom: 30px;
             text-shadow: 0 0 15px rgba(160, 32, 240, 0.6);
         }
@@ -53,7 +50,7 @@
         .price-list {
             list-style: none;
             padding: 0;
-            margin: 0 0 30px 0;
+            margin-bottom: 30px;
         }
 
         .price-item {
@@ -64,43 +61,46 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .service-name {
-            font-size: 0.85rem;
-            color: #ccc;
-            letter-spacing: 1px;
-        }
+        .service-name { font-size: 0.85rem; color: #ccc; }
 
         .service-price {
             font-weight: 700;
-            color: #00ff88; /* Яркий зеленый */
+            color: #00ff88;
             text-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
-            white-space: nowrap;
         }
 
-        /* БЛОК ИГРЫ */
-        .game-box {
-            background: rgba(160, 32, 240, 0.05);
-            border: 1px solid rgba(160, 32, 240, 0.2);
-            border-radius: 20px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        #game-canvas {
+        /* КОНТЕЙНЕР ДЛЯ ГРИ */
+        #game-container {
+            position: relative;
+            width: 100%;
+            height: 250px;
             background: #000;
             border: 2px solid #a020f0;
-            border-radius: 10px;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 20px;
             cursor: crosshair;
-            max-width: 100%;
-            display: block;
-            margin: 15px auto;
-            touch-action: none; /* Чтобы удобно было на телефоне */
+            touch-action: none;
+        }
+
+        .game-info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 0.8rem;
+            color: #a020f0;
+            z-index: 10;
+        }
+
+        .falling-item {
+            position: absolute;
+            font-size: 2rem;
+            user-select: none;
         }
 
         .back-btn {
             display: block;
-            width: 220px;
+            width: 200px;
             margin: 0 auto;
             text-align: center;
             text-decoration: none;
@@ -130,65 +130,68 @@
             <li class="price-item"><span class="service-name">Діагностика</span><span class="service-price">БЕЗКОШТОВНО</span></li>
             <li class="price-item"><span class="service-name">Чистка + термопаста</span><span class="service-price">450 грн</span></li>
             <li class="price-item"><span class="service-name">Встановлення Windows</span><span class="service-price">500 грн</span></li>
-            <li class="price-item"><span class="service-name">Заміна екрану / АКБ</span><span class="service-price">від 400 грн</span></li>
-            <li class="price-item"><span class="service-name">Складання ПК</span><span class="service-price">від 1000 грн</span></li>
+            <li class="price-item"><span class="service-name">Ремонт материнських плат</span><span class="service-price">від 800 грн</span></li>
         </ul>
 
-        <div class="game-box">
-            <div style="color: #a020f0; font-size: 0.7rem; letter-spacing: 2px; margin-bottom: 10px;">RELAX ZONE: CLICK THE DOT</div>
-            <canvas id="game-canvas" width="280" height="150"></canvas>
-            <div style="font-size: 1rem;">Score: <span id="score" style="color: #00ff88;">0</span></div>
+        <div id="game-container">
+            <div class="game-info">Score: <span id="score">0</span></div>
+            <div id="game-area"></div>
         </div>
 
         <a href="index.html" class="back-btn">На головну</a>
     </div>
 
     <script>
-        const canvas = document.getElementById('game-canvas');
-        const ctx = canvas.getContext('2d');
+        const gameArea = document.getElementById('game-area');
         const scoreEl = document.getElementById('score');
+        const container = document.getElementById('game-container');
         let score = 0;
-        let target = { x: 140, y: 75, r: 12 };
+        const items = ['💻', '🖱️', '⚙️', '🔌', '⌨️', '🔋'];
 
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            // Рисуем точку
-            ctx.beginPath();
-            ctx.arc(target.x, target.y, target.r, 0, Math.PI * 2);
-            ctx.fillStyle = "#00ff88";
-            ctx.shadowBlur = 20;
-            ctx.shadowColor = "#00ff88";
-            ctx.fill();
-            ctx.closePath();
-        }
+        function createItem() {
+            const item = document.createElement('div');
+            item.className = 'falling-item';
+            item.innerText = items[Math.floor(Math.random() * items.length)];
+            
+            // Випадкова позиція по горизонталі
+            const startX = Math.random() * (container.offsetWidth - 40);
+            item.style.left = startX + 'px';
+            item.style.top = '-50px';
+            
+            gameArea.appendChild(item);
 
-        function handleInput(e) {
-            const rect = canvas.getBoundingClientRect();
-            // Поддержка и мышки, и тача на телефоне
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            
-            const x = clientX - rect.left;
-            const y = clientY - rect.top;
-            
-            const dist = Math.hypot(x - target.x, y - target.y);
-            
-            if (dist < target.r + 5) { // +5 для легкого попадания
+            let posY = -50;
+            const speed = 2 + Math.random() * 3;
+
+            function fall() {
+                posY += speed;
+                item.style.top = posY + 'px';
+
+                // Видалення, якщо вилетів за межі
+                if (posY > container.offsetHeight) {
+                    item.remove();
+                } else {
+                    requestAnimationFrame(fall);
+                }
+            }
+
+            // Клік по запчастині
+            const onHit = (e) => {
+                e.preventDefault();
                 score++;
                 scoreEl.textContent = score;
-                target.x = Math.random() * (canvas.width - 40) + 20;
-                target.y = Math.random() * (canvas.height - 40) + 20;
-                draw();
-            }
+                item.style.transform = 'scale(0)';
+                setTimeout(() => item.remove(), 100);
+            };
+
+            item.addEventListener('mousedown', onHit);
+            item.addEventListener('touchstart', onHit);
+
+            requestAnimationFrame(fall);
         }
 
-        canvas.addEventListener('mousedown', handleInput);
-        canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // Чтобы страница не дергалась при игре
-            handleInput(e);
-        });
-
-        draw();
+        // Створювати нову запчастину кожну секунду
+        setInterval(createItem, 1000);
     </script>
 </body>
 </html>
