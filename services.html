@@ -2,22 +2,17 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Snoopy Service - Послуги</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
         body {
-            background-color: #0a0a0a; /* Тепер фон не буде білим */
+            background-color: #0a0a0a;
             background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('BG.JPG');
-            background-repeat: no-repeat;
-            background-position: center center;
-            background-attachment: fixed;
-            background-size: cover;
-            color: #e0e0e0;
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0; padding: 20px;
-            display: flex; flex-direction: column; align-items: center; min-height: 100vh;
+            background-repeat: no-repeat; background-position: center; background-attachment: fixed; background-size: cover;
+            color: #e0e0e0; font-family: 'Segoe UI', sans-serif;
+            margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh;
         }
 
         .header-left { align-self: flex-start; margin-bottom: 25px; }
@@ -33,17 +28,8 @@
         .service-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .price { color: #00ff00; font-family: 'Orbitron', sans-serif; font-weight: bold; }
 
-        /* Галерея на 2 фото */
         .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .work-img { 
-            width: 100%; 
-            height: 160px; 
-            object-fit: cover; 
-            border-radius: 12px; 
-            border: 1px solid #444; 
-            cursor: pointer; 
-            transition: 0.3s; 
-        }
+        .work-img { width: 100%; height: 160px; object-fit: cover; border-radius: 12px; border: 1px solid #444; cursor: pointer; transition: 0.3s; }
         .work-img:hover { border-color: #ff9100; transform: scale(1.05); }
         
         #imgModal { display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; backdrop-filter: blur(8px); cursor: zoom-out; }
@@ -53,11 +39,11 @@
         .btn { padding: 15px; border-radius: 40px; text-align: center; text-decoration: none; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: bold; cursor: pointer; border: 2px solid; transition: 0.3s; text-transform: uppercase; }
         .back-btn { color: #ff9100; border-color: #ff9100; }
         .game-btn { color: #ff0055; border-color: #ff0055; }
-        .game-btn:hover { background: #ff0055; color: #fff; }
 
         #game-section { display: none; margin-top: 20px; width: 320px; height: 400px; background: #000; border: 2px solid #ff0055; border-radius: 20px; position: relative; overflow: hidden; touch-action: none; }
-        #gameCanvas { width: 100%; height: 100%; }
+        #gameCanvas { width: 100%; height: 100%; background: radial-gradient(circle, #111, #000); }
         #score { position: absolute; top: 10px; left: 15px; color: #00ff00; font-family: 'Orbitron', sans-serif; z-index: 10; }
+        .mute-btn { position: absolute; bottom: 10px; right: 10px; background: none; border: 1px solid #ff0055; color: #ff0055; padding: 5px 10px; border-radius: 15px; font-size: 0.7rem; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -84,7 +70,7 @@
                 <img src="phot01.jpg" class="work-img" onclick="showImg(this.src)">
                 <img src="phot02.jpg" class="work-img" onclick="showImg(this.src)">
             </div>
-            <p style="font-size: 0.7rem; color: #777; margin-top: 10px;">Натисніть для збільшення</p>
+            <p style="font-size: 0.7rem; color: #777; margin-top: 10px;">Клікніть для збільшення</p>
         </div>
     </div>
 
@@ -96,13 +82,15 @@
     <div id="game-section">
         <div id="score">SCORE: 0</div>
         <canvas id="gameCanvas"></canvas>
+        <button class="mute-btn" onclick="toggleMute()">🔊 SOUND</button>
     </div>
 
+    <audio id="game-audio" loop preload="auto">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
-        function showImg(src) { 
-            document.getElementById('fullImg').src = src; 
-            document.getElementById('imgModal').style.display = 'flex'; 
-        }
+        function showImg(src) { document.getElementById('fullImg').src = src; document.getElementById('imgModal').style.display = 'flex'; }
         
         function updateClock() {
             let now = new Date();
@@ -113,6 +101,7 @@
         const cvs = document.getElementById('gameCanvas');
         const ctx = cvs.getContext('2d');
         const scoreEl = document.getElementById('score');
+        const audio = document.getElementById('game-audio');
         let active = false, score = 0, items = [], basket = { x: 125, w: 70 };
 
         function toggleGame() {
@@ -120,27 +109,33 @@
             document.getElementById('game-section').style.display = active ? 'block' : 'none';
             if(active) { 
                 cvs.width = 320; cvs.height = 400; 
-                score = 0; scoreEl.innerText = "SCORE: 0";
-                items = []; 
+                score = 0; scoreEl.innerText = "SCORE: 0"; items = []; 
+                audio.play().catch(() => console.log("Sound enabled after interaction"));
                 requestAnimationFrame(gameLoop); 
-            }
+            } else { audio.pause(); }
+        }
+
+        function toggleMute() {
+            audio.muted = !audio.muted;
+            event.target.innerText = audio.muted ? "🔇 MUTE" : "🔊 SOUND";
         }
 
         function gameLoop() {
             if(!active) return;
             ctx.clearRect(0, 0, 320, 400);
             if(Math.random() < 0.03) items.push({ x: Math.random()*290, y: -20, bad: Math.random() < 0.2 });
+            
             ctx.fillStyle = "#ff9100";
             ctx.fillRect(basket.x, 375, basket.w, 10);
 
             for(let i = items.length - 1; i >= 0; i--) {
                 let it = items[i];
-                it.y += 3.5;
+                it.y += (3 + (score * 0.05));
                 ctx.font = "24px Arial";
                 ctx.fillText(it.bad ? "👾" : "⚙️", it.x, it.y);
 
                 if(it.y > 365 && it.y < 385 && it.x > basket.x - 10 && it.x < basket.x + basket.w) {
-                    if(it.bad) { alert("GAME OVER! Score: " + score); toggleGame(); return; }
+                    if(it.bad) { alert("BOOM! Score: " + score); toggleGame(); return; }
                     else { score++; scoreEl.innerText = "SCORE: " + score; items.splice(i, 1); continue; }
                 }
                 if(it.y > 410) items.splice(i, 1);
@@ -154,8 +149,10 @@
             basket.x = Math.max(0, Math.min(320 - basket.w, x));
         }
 
-        window.addEventListener('mousemove', e => move(e.clientX));
-        cvs.addEventListener('touchmove', e => { move(e.touches[0].clientX); e.preventDefault(); }, {passive: false});
+        window.addEventListener('mousemove', e => { if(active) move(e.clientX); });
+        cvs.addEventListener('touchmove', e => {
+            if(active) { move(e.touches[0].clientX); e.preventDefault(); }
+        }, {passive: false});
     </script>
 </body>
 </html>
