@@ -3,179 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snoopy Service - Послуги</title>
+    <title>Snoopy Service - Послуги та Ціни</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
-        
+
         body {
             background-color: #0a0a0a;
             background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('BG.JPG');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            color: #e0e0e0;
-            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #ffffff;
+            font-family: 'Orbitron', sans-serif;
             margin: 0;
-            padding: 20px 20px 60px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-        }
-
-        .logo-top-left {
-            align-self: flex-start;
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(0.7rem, 4vw, 1rem);
-            color: #00d4ff;
-            opacity: 0.5;
-            margin-bottom: 40px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        /* КОНТЕЙНЕР ДЛЯ АСИМЕТРІЇ */
-        .main-layout {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            width: 100%;
-            max-width: 1000px;
-            align-items: flex-start;
-        }
-
-        /* ЛІВИЙ БЛОК (ПРАЙС) - ВІН БІЛЬШИЙ */
-        .price-container {
-            flex: 2; /* Займає 2 частини */
-            min-width: 320px;
-            background: rgba(15, 15, 15, 0.95);
-            border: 1px solid #333;
-            border-radius: 25px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        /* ПРАВИЙ БЛОК (ФОТО) - ВІН МЕНШИЙ І ЗСУНУТИЙ */
-        .photo-aside {
-            flex: 1; /* Займає 1 частину (вдвічі менший) */
-            min-width: 250px;
-            background: rgba(15, 15, 15, 0.95);
-            border: 1px solid #333;
-            border-radius: 25px;
             padding: 20px;
-            margin-top: 45px; /* Асиметричний зсув вниз */
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        h2 { 
-            font-family: 'Orbitron', sans-serif;
-            color: #ff9100; 
-            text-transform: uppercase; 
-            font-size: 1.2rem;
-            margin-bottom: 25px;
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 30px;
+            border: 1px solid rgba(160, 32, 240, 0.2);
+            backdrop-filter: blur(20px);
+            padding: 30px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 1);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: #a020f0; /* Бузковий колір */
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px rgba(160, 32, 240, 0.6);
+        }
+
+        .price-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 30px 0;
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .service-name {
+            font-size: 0.85rem;
+            color: #ccc;
             letter-spacing: 1px;
         }
 
-        .category-title {
-            font-family: 'Orbitron', sans-serif;
-            color: #00d4ff;
-            font-size: 0.8rem;
-            margin-top: 20px;
-            opacity: 0.7;
-            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
-            padding-bottom: 5px;
+        /* ЯСКРАВО-ЗЕЛЕНІ ЦІНИ */
+        .service-price {
+            font-weight: 700;
+            color: #00ff88;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
+            white-space: nowrap;
         }
 
-        .service-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            font-size: 0.95rem;
+        /* БЛОК ГРИ */
+        .game-box {
+            background: rgba(160, 32, 240, 0.05);
+            border: 1px solid rgba(160, 32, 240, 0.2);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
-        .price { 
-            font-family: 'Orbitron', sans-serif;
-            color: #00ff00; 
-            font-weight: bold;
+        #game-canvas {
+            background: #000;
+            border: 2px solid #a020f0;
+            border-radius: 10px;
+            cursor: crosshair;
+            max-width: 100%;
+            display: block;
+            margin: 15px auto;
         }
 
-        /* ГАЛЕРЕЯ В ОДНУ КОЛОНКУ ДЛЯ ВУЗЬКОГО БЛОКУ */
-        .mini-gallery {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .mini-gallery img {
-            width: 100%;
-            height: auto;
-            border-radius: 12px;
-            border: 1px solid #444;
-            filter: grayscale(30%);
-            transition: 0.3s;
-        }
-
-        .mini-gallery img:hover {
-            filter: grayscale(0%);
-            border-color: #ff9100;
-        }
-
+        /* КНОПКА НАЗАД */
         .back-btn {
-            margin-top: 50px;
-            padding: 15px 40px;
-            color: #ff9100;
-            border: 2px solid #ff9100;
+            display: block;
+            width: 200px;
+            margin: 0 auto;
+            text-align: center;
             text-decoration: none;
-            border-radius: 50px;
-            font-family: 'Orbitron', sans-serif;
+            color: #ffffff;
             font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 15px;
+            border: 2px solid #a020f0;
+            border-radius: 50px;
             transition: 0.3s;
+            background: transparent;
         }
 
         .back-btn:hover {
-            background: #ff9100;
+            background: #a020f0;
+            box-shadow: 0 0 25px rgba(160, 32, 240, 0.5);
             color: #000;
-        }
-
-        /* АДАПТИВНІСТЬ: на телефонах прибираємо зсув */
-        @media (max-width: 768px) {
-            .main-layout { flex-direction: column; }
-            .photo-aside { margin-top: 0; width: 100%; }
-            .price-container { width: 100%; }
-            .mini-gallery { flex-direction: row; overflow-x: auto; padding-bottom: 10px; }
-            .mini-gallery img { width: 150px; flex-shrink: 0; }
         }
     </style>
 </head>
 <body>
 
-    <div class="logo-top-left">Service by Snoopy</div>
+    <div class="container">
+        <h2>Наші Послуги</h2>
+        
+        <ul class="price-list">
+            <li class="price-item"><span class="service-name">Діагностика</span><span class="service-price">БЕЗКОШТОВНО</span></li>
+            <li class="price-item"><span class="service-name">Профілактика (чистка + паста)</span><span class="service-price">450 грн</span></li>
+            <li class="price-item"><span class="service-name">Встановлення ОС Windows 10/11</span><span class="service-price">500 грн</span></li>
+            <li class="price-item"><span class="service-name">Заміна комплектуючих</span><span class="service-price">від 300 грн</span></li>
+            <li class="price-item"><span class="service-name">Складання ігрових ПК</span><span class="service-price">від 1200 грн</span></li>
+        </ul>
 
-    <div class="main-layout">
-        <div class="price-container">
-            <h2>Прайс послуг</h2>
-            <div class="category-title">⚙️ ЗАЛІЗО</div>
-            <div class="service-item"><span>Чистка + термопаста</span> <span class="price">500 ₴</span></div>
-            <div class="service-item"><span>Збірка ПК</span> <span class="price">1000 ₴</span></div>
-            <div class="service-item"><span>Апгрейд</span> <span class="price">від 300 ₴</span></div>
-            
-            <div class="category-title">💻 СОФТ</div>
-            <div class="service-item"><span>Windows + драйвери</span> <span class="price">450 ₴</span></div>
-            <div class="service-item"><span>Оптимізація</span> <span class="price">300 ₴</span></div>
+        <div class="game-box">
+            <span style="color: #a020f0; font-size: 0.7rem; letter-spacing: 2px;">RELAX ZONE: CLICK THE DOT</span>
+            <canvas id="game-canvas" width="280" height="150"></canvas>
+            <div style="font-size: 0.9rem;">Score: <span id="score" style="color: #00ff88;">0</span></div>
         </div>
 
-        <div class="photo-aside">
-            <h2>Work</h2>
-            <div class="mini-gallery">
-                <img src="WORK1.JPG" alt="Work 1">
-                <img src="WORK2.JPG" alt="Work 2">
-            </div>
-            <p style="font-size: 0.7rem; color: #555; margin-top: 10px; text-align: center;">Галерея робіт</p>
-        </div>
+        <a href="index.html" class="back-btn">Назад</a>
     </div>
 
-    <a href="index.html" class="back-btn">← НА ГОЛОВНУ</a>
+    <script>
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        const scoreEl = document.getElementById('score');
+        let score = 0;
+        let target = { x: 140, y: 75, r: 12 };
 
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.arc(target.x, target.y, target.r, 0, Math.PI * 2);
+            ctx.fillStyle = "#00ff88";
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = "#00ff88";
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const dist = Math.hypot(x - target.x, y - target.y);
+            if (dist < target.r) {
+                score++;
+                scoreEl.textContent = score;
+                target.x = Math.random() * (canvas.width - 40) + 20;
+                target.y = Math.random() * (canvas.height - 40) + 20;
+                draw();
+            }
+        });
+
+        // Малювання першої цілі
+        draw();
+    </script>
 </body>
 </html>
