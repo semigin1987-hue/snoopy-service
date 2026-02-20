@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Послуги - Snoopy Service</title>
+    <title>Snoopy Service - Послуги</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
@@ -15,105 +15,136 @@
             background-position: center;
             background-attachment: fixed;
             color: #e0e0e0;
-            font-family: 'Segoe UI', Arial, sans-serif; /* Основний текст залишаємо читабельним */
+            font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 20px 20px 60px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
         }
 
-        /* ЛОГОТИП СЛІВА ВГОРІ */
         .logo-top-left {
             align-self: flex-start;
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(0.7rem, 4vw, 1.1rem);
+            font-size: clamp(0.7rem, 4vw, 1rem);
             color: #00d4ff;
             opacity: 0.5;
-            margin-bottom: 20px;
-            text-transform: uppercase;
+            margin-bottom: 40px;
             letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
-        .container {
+        /* КОНТЕЙНЕР ДЛЯ АСИМЕТРІЇ */
+        .main-layout {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
             width: 100%;
-            max-width: 550px;
-            background: rgba(20, 20, 20, 0.95);
+            max-width: 1000px;
+            align-items: flex-start;
+        }
+
+        /* ЛІВИЙ БЛОК (ПРАЙС) - ВІН БІЛЬШИЙ */
+        .price-container {
+            flex: 2; /* Займає 2 частини */
+            min-width: 320px;
+            background: rgba(15, 15, 15, 0.95);
             border: 1px solid #333;
             border-radius: 25px;
-            padding: clamp(20px, 5vw, 40px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        /* ЗАГОЛОВОК ПРАЙСУ (ORBITRON) */
+        /* ПРАВИЙ БЛОК (ФОТО) - ВІН МЕНШИЙ І ЗСУНУТИЙ */
+        .photo-aside {
+            flex: 1; /* Займає 1 частину (вдвічі менший) */
+            min-width: 250px;
+            background: rgba(15, 15, 15, 0.95);
+            border: 1px solid #333;
+            border-radius: 25px;
+            padding: 20px;
+            margin-top: 45px; /* Асиметричний зсув вниз */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
         h2 { 
             font-family: 'Orbitron', sans-serif;
             color: #ff9100; 
-            text-align: center; 
             text-transform: uppercase; 
-            font-size: 1.6rem;
-            letter-spacing: 2px;
-            margin-top: 0;
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
         }
 
-        /* КАТЕГОРІЇ (ORBITRON) */
         .category-title {
             font-family: 'Orbitron', sans-serif;
             color: #00d4ff;
-            font-size: 0.85rem;
-            margin-top: 25px;
-            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
-            padding-bottom: 8px;
-            letter-spacing: 1px;
+            font-size: 0.8rem;
+            margin-top: 20px;
+            opacity: 0.7;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+            padding-bottom: 5px;
         }
 
         .service-item {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 14px 0;
-            font-size: clamp(0.9rem, 4vw, 1rem);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        /* ЦІНИ (ORBITRON) */
-        .price { 
-            font-family: 'Orbitron', sans-serif;
-            color: #00ff00; 
-            font-weight: bold; 
-            white-space: nowrap; 
-            margin-left: 15px;
+            padding: 12px 0;
             font-size: 0.95rem;
         }
 
-        /* КНОПКА (ORBITRON) */
+        .price { 
+            font-family: 'Orbitron', sans-serif;
+            color: #00ff00; 
+            font-weight: bold;
+        }
+
+        /* ГАЛЕРЕЯ В ОДНУ КОЛОНКУ ДЛЯ ВУЗЬКОГО БЛОКУ */
+        .mini-gallery {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .mini-gallery img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            border: 1px solid #444;
+            filter: grayscale(30%);
+            transition: 0.3s;
+        }
+
+        .mini-gallery img:hover {
+            filter: grayscale(0%);
+            border-color: #ff9100;
+        }
+
         .back-btn {
-            display: block;
-            margin-top: 35px;
-            padding: 16px;
+            margin-top: 50px;
+            padding: 15px 40px;
             color: #ff9100;
             border: 2px solid #ff9100;
             text-decoration: none;
             border-radius: 50px;
-            text-align: center;
-            font-weight: bold;
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             transition: 0.3s;
-            letter-spacing: 1px;
         }
 
-        .back-btn:hover { 
-            background: #ff9100; 
-            color: #000; 
-            transform: translateY(-2px);
+        .back-btn:hover {
+            background: #ff9100;
+            color: #000;
         }
 
-        @media (max-width: 480px) {
-            body { padding: 15px; }
-            .container { padding: 25px 20px; }
-            .logo-top-left { margin-left: 10px; }
+        /* АДАПТИВНІСТЬ: на телефонах прибираємо зсув */
+        @media (max-width: 768px) {
+            .main-layout { flex-direction: column; }
+            .photo-aside { margin-top: 0; width: 100%; }
+            .price-container { width: 100%; }
+            .mini-gallery { flex-direction: row; overflow-x: auto; padding-bottom: 10px; }
+            .mini-gallery img { width: 150px; flex-shrink: 0; }
         }
     </style>
 </head>
@@ -121,23 +152,30 @@
 
     <div class="logo-top-left">Service by Snoopy</div>
 
-    <div class="container">
-        <h2>Прайс послуг</h2>
+    <div class="main-layout">
+        <div class="price-container">
+            <h2>Прайс послуг</h2>
+            <div class="category-title">⚙️ ЗАЛІЗО</div>
+            <div class="service-item"><span>Чистка + термопаста</span> <span class="price">500 ₴</span></div>
+            <div class="service-item"><span>Збірка ПК</span> <span class="price">1000 ₴</span></div>
+            <div class="service-item"><span>Апгрейд</span> <span class="price">від 300 ₴</span></div>
+            
+            <div class="category-title">💻 СОФТ</div>
+            <div class="service-item"><span>Windows + драйвери</span> <span class="price">450 ₴</span></div>
+            <div class="service-item"><span>Оптимізація</span> <span class="price">300 ₴</span></div>
+        </div>
 
-        <div class="category-title">⚙️ ЗАЛІЗО</div>
-        <div class="service-item"><span>Чистка + термопаста</span> <span class="price">500 ₴</span></div>
-        <div class="service-item"><span>Збірка ПК</span> <span class="price">1000 ₴</span></div>
-        <div class="service-item"><span>Заміна деталей</span> <span class="price">300 ₴</span></div>
-
-        <div class="category-title">💻 СОФТ</div>
-        <div class="service-item"><span>Windows + Soft</span> <span class="price">450 ₴</span></div>
-        <div class="service-item"><span>Оптимізація</span> <span class="price">350 ₴</span></div>
-
-        <div class="category-title">🚗 ВИЇЗД</div>
-        <div class="service-item"><span>Виклик майстра</span> <span class="price">200 ₴</span></div>
-
-        <a href="index.html" class="back-btn">← НА ГОЛОВНУ</a>
+        <div class="photo-aside">
+            <h2>Work</h2>
+            <div class="mini-gallery">
+                <img src="WORK1.JPG" alt="Work 1">
+                <img src="WORK2.JPG" alt="Work 2">
+            </div>
+            <p style="font-size: 0.7rem; color: #555; margin-top: 10px; text-align: center;">Галерея робіт</p>
+        </div>
     </div>
+
+    <a href="index.html" class="back-btn">← НА ГОЛОВНУ</a>
 
 </body>
 </html>
