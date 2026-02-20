@@ -3,194 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snoopy Service - Послуги</title>
+    <title>Snoopy Service - Ціни</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; scroll-behavior: smooth; }
+        * { box-sizing: border-box; }
+
         body {
             background-color: #0a0a0a;
-            background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('BG.JPG');
+            background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('BG.JPG');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            color: #e0e0e0;
-            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #ffffff;
+            font-family: 'Orbitron', sans-serif;
             margin: 0;
-            padding: 20px;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
             min-height: 100vh;
+            padding: 20px;
         }
-        .logo-top-left {
-            align-self: flex-start;
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(0.7rem, 4vw, 1rem);
-            color: #00d4ff;
-            opacity: 0.5;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
-        .main-layout {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            width: 100%;
-            max-width: 1000px;
-            align-items: flex-start;
-        }
-        .price-container, .photo-aside {
-            background: rgba(15, 15, 15, 0.95);
-            border: 1px solid #333;
-            border-radius: 25px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .price-container { flex: 2; min-width: 300px; }
-        .photo-aside { flex: 1; min-width: 250px; }
-        h2 { font-family: 'Orbitron', sans-serif; color: #ff9100; text-transform: uppercase; font-size: 1.2rem; }
-        .service-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .price { font-family: 'Orbitron', sans-serif; color: #00ff00; font-weight: bold; }
-        
-        .btn-row { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 400px; margin-top: 30px; }
-        .back-btn, .game-toggle-btn {
-            padding: 15px; text-decoration: none; border-radius: 50px; font-family: 'Orbitron', sans-serif;
-            font-size: 0.8rem; font-weight: bold; text-align: center; cursor: pointer; text-transform: uppercase; border: 2px solid;
-        }
-        .back-btn { color: #ff9100; border-color: #ff9100; background: transparent; }
-        .back-btn:hover { background: #ff9100; color: #000; }
-        .game-toggle-btn { color: #ff0055; border-color: #ff0055; background: transparent; }
-        .game-toggle-btn:hover { background: #ff0055; color: #fff; }
 
-        #game-section { display: none; width: 100%; max-width: 400px; height: 400px; background: #000; border: 2px solid #ff0055; border-radius: 25px; margin-top: 20px; position: relative; overflow: hidden; touch-action: none; }
-        #gameCanvas { width: 100%; height: 100%; }
-        #score-board { position: absolute; top: 10px; left: 10px; font-family: 'Orbitron', sans-serif; color: #00ff00; }
-        
-        /* Кнопка керування звуком (опціонально) */
-        .mute-btn {
-            position: fixed; bottom: 20px; right: 20px;
-            background: rgba(255, 145, 0, 0.2); border: 1px solid #ff9100;
-            color: #ff9100; border-radius: 50%; width: 40px; height: 40px;
-            cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            padding: 30px;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 1);
+        }
+
+        h2 {
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: #a020f0; /* Бузковий, як на головній */
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(160, 32, 240, 0.5);
+        }
+
+        .price-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .service-name {
+            font-size: 0.9rem;
+            color: #e0e0e0;
+            letter-spacing: 1px;
+        }
+
+        /* ТІ САМІ ЯСКРАВІ ЗЕЛЕНІ ЦІНИ */
+        .service-price {
+            font-weight: 700;
+            color: #00ff88;
+            text-shadow: 
+                0 0 8px rgba(0, 255, 136, 0.6),
+                0 0 15px rgba(0, 255, 136, 0.3);
+            white-space: nowrap;
+            margin-left: 15px;
+        }
+
+        .back-btn {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #ffffff;
         }
     </style>
 </head>
 <body>
 
-    <div class="logo-top-left">Service by Snoopy</div>
+    <div class="container">
+        <h2>Прайс-лист</h2>
+        
+        <ul class="price-list">
+            <li class="price-item">
+                <span class="service-name">Діагностика</span>
+                <span class="service-price">Безкоштовно</span>
+            </li>
+            <li class="price-item">
+                <span class="service-name">Чистка та заміна термопасти</span>
+                <span class="service-price">від 600 грн</span>
+            </li>
+            <li class="price-item">
+                <span class="service-name">Встановлення Windows + Drivers</span>
+                <span class="service-price">від 650 грн</span>
+            </li>
+            <li class="price-item">
+                <span class="service-name">Заміна екрану ноутбука (робота)</span>
+                <span class="service-price">від 600 грн</span>
+            </li>
+            <li class="price-item">
+                <span class="service-name">Ремонт материнської плати</span>
+                <span class="service-price">від 800 грн</span>
+            </li>
+        </ul>
 
-    <div class="main-layout">
-        <div class="price-container">
-            <h2>Прайс послуг</h2>
-            <div class="service-item"><span>Чистка + паста</span> <span class="price">500 ₴</span></div>
-            <div class="service-item"><span>Збірка ПК</span> <span class="price">1000 ₴</span></div>
-            <div class="service-item"><span>Windows + Soft</span> <span class="price">450 ₴</span></div>
-            <div class="service-item"><span>Заміна термопрокладок</span> <span class="price">від 400 ₴</span></div>
-        </div>
-        <div class="photo-aside">
-            <h2>Work</h2>
-            <img src="WORK1.JPG" alt="Work" style="width: 100%; border-radius: 15px; border: 1px solid #333;">
-        </div>
+        <a href="index.html" class="back-btn">Назад</a>
     </div>
 
-    <div class="btn-row">
-        <div class="game-toggle-btn" onclick="toggleGame()">🎮 GAME MODE</div>
-        <a href="index.html" class="back-btn">← НА ГОЛОВНУ</a>
-    </div>
-
-    <div id="game-section">
-        <div id="score-board">SCORE: 0</div>
-        <canvas id="gameCanvas"></canvas>
-    </div>
-
-    <audio id="bg-music" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-    </audio>
-    
-    <button class="mute-btn" onclick="toggleMute()">🔊</button>
-
-    <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const gameSection = document.getElementById('game-section');
-        const music = document.getElementById('bg-music');
-        let gameActive = false, score = 0, items = [];
-        let basket = { x: 0, y: 0, w: 70, h: 10 };
-
-        // Налаштування гучності
-        music.volume = 0.3;
-
-        function toggleGame() {
-            gameActive = !gameActive;
-            gameSection.style.display = gameActive ? 'block' : 'none';
-            
-            // Запуск музики при натисканні на кнопку
-            if (music.paused) music.play();
-
-            if (gameActive) {
-                resize();
-                reset();
-                setTimeout(() => gameSection.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
-                requestAnimationFrame(loop);
-            }
-        }
-
-        function toggleMute() {
-            music.muted = !music.muted;
-            document.querySelector('.mute-btn').innerText = music.muted ? '🔇' : '🔊';
-        }
-
-        // Запуск музики при першому кліку по будь-якому місцю сторінки
-        document.body.addEventListener('click', () => {
-            if (music.paused) music.play();
-        }, { once: true });
-
-        function resize() {
-            canvas.width = gameSection.offsetWidth;
-            canvas.height = gameSection.offsetHeight;
-            basket.y = canvas.height - 30;
-            basket.x = canvas.width / 2 - 35;
-        }
-
-        function reset() { score = 0; items = []; updateScore(); }
-        function updateScore() { document.getElementById('score-board').innerText = 'SCORE: ' + score; }
-
-        function loop() {
-            if (!gameActive) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if (Math.random() < 0.03) items.push({ x: Math.random()*(canvas.width-20), y: -20, v: Math.random()<0.3 });
-            
-            ctx.fillStyle = '#ff9100';
-            ctx.fillRect(basket.x, basket.y, basket.w, basket.h);
-
-            items.forEach((item, i) => {
-                item.y += 4;
-                ctx.font = '20px Arial';
-                ctx.fillText(item.v ? '👾' : '⚙️', item.x, item.y);
-                if (item.y > basket.y && item.x > basket.x && item.x < basket.x + basket.w) {
-                    if (item.v) { 
-                        alert('GAME OVER! Score: ' + score); 
-                        toggleGame(); 
-                    } else { 
-                        score++; 
-                        updateScore(); 
-                        items.splice(i, 1); 
-                    }
-                }
-                if (item.y > canvas.height) items.splice(i, 1);
-            });
-            requestAnimationFrame(loop);
-        }
-
-        function move(e) {
-            const rect = canvas.getBoundingClientRect();
-            const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-            basket.x = Math.max(0, Math.min(canvas.width - basket.w, x - basket.w/2));
-        }
-
-        gameSection.addEventListener('mousemove', move);
-        gameSection.addEventListener('touchmove', (e) => { move(e); e.preventDefault(); }, {passive: false});
-        window.onresize = resize;
-    </script>
 </body>
 </html>
