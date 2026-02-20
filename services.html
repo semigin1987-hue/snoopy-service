@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Snoopy Service - Услуги</title>
+    <title>Snoopy Service - Послуги</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
@@ -30,7 +30,6 @@
 
         .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
         .work-img { width: 100%; height: 160px; object-fit: cover; border-radius: 12px; border: 1px solid #444; cursor: pointer; transition: 0.3s; }
-        .work-img:hover { border-color: #ff9100; transform: scale(1.02); }
         
         #imgModal { display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; backdrop-filter: blur(8px); cursor: zoom-out; }
         #imgModal img { max-width: 90%; max-height: 90%; border: 2px solid #ff9100; border-radius: 10px; }
@@ -40,6 +39,7 @@
         .back-btn { color: #ff9100; border-color: #ff9100; }
         .game-btn { color: #ff0055; border-color: #ff0055; }
 
+        /* ВИПРАВЛЕНО: додано touch-action: none для стабільності */
         #game-section { display: none; margin-top: 20px; width: 320px; height: 400px; background: #000; border: 2px solid #ff0055; border-radius: 20px; position: relative; overflow: hidden; touch-action: none; }
         #gameCanvas { width: 100%; height: 100%; background: radial-gradient(circle, #111, #000); }
         #score { position: absolute; top: 10px; left: 15px; color: #00ff00; font-family: 'Orbitron', sans-serif; z-index: 10; }
@@ -51,31 +51,31 @@
 
     <div class="header-left">
         <div class="neon-logo">Snoopy Digital Service</div>
-        <div id="live-clock" class="clock">Загрузка...</div>
+        <div id="live-clock" class="clock">Завантаження...</div>
     </div>
 
     <div class="main-layout">
         <div class="card price-container">
-            <h2>Прайс-лист</h2>
-            <div class="service-item"><span>Чистка + замена термопасты</span> <span class="price">от 600 ₴</span></div>
-            <div class="service-item"><span>Сборка и апгрейд ПК</span> <span class="price">1000 ₴</span></div>
-            <div class="service-item"><span>Установка Windows + ПО</span> <span class="price">650 ₴</span></div>
-            <div class="service-item"><span>Выезд мастера</span> <span class="price">от 500 ₴</span></div>
+            <h2>Наші послуги</h2>
+            <div class="service-item"><span>Чистка та заміна пасти</span> <span class="price">від 600 ₴</span></div>
+            <div class="service-item"><span>Збірка та апгрейд ПК</span> <span class="price">1000 ₴</span></div>
+            <div class="service-item"><span>Windows та ПЗ</span> <span class="price">650 ₴</span></div>
+            <div class="service-item"><span>Виїзд майстра</span> <span class="price">від 500 ₴</span></div>
         </div>
 
         <div class="card photo-aside">
-            <h2>Портфолио</h2>
+            <h2>Портфоліо</h2>
             <div class="gallery">
                 <img src="phot01.jpg" class="work-img" onclick="showImg(this.src)">
                 <img src="photo777.png" class="work-img" onclick="showImg(this.src)" onerror="this.src='phot01.jpg'">
             </div>
-            <p style="font-size: 0.7rem; color: #777; margin-top: 10px;">Кликните для увеличения</p>
+            <p style="font-size: 0.7rem; color: #777; margin-top: 10px;">Клікніть для збільшення</p>
         </div>
     </div>
 
     <div class="btn-group">
-        <div class="btn game-btn" onclick="toggleGame()">🎮 ИГРОВОЙ РЕЖИМ</div>
-        <a href="index.html" class="btn back-btn">← НА ГЛАВНУНУ</a>
+        <div class="btn game-btn" onclick="toggleGame()">🎮 РЕЖИМ ГРИ</div>
+        <a href="index.html" class="btn back-btn">← НА ГОЛОВНУ</a>
     </div>
 
     <div id="game-section">
@@ -88,7 +88,7 @@
         
         function updateClock() {
             let now = new Date();
-            document.getElementById('live-clock').innerText = now.toLocaleDateString('ru-RU') + " | " + now.toLocaleTimeString('ru-RU');
+            document.getElementById('live-clock').innerText = now.toLocaleDateString('uk-UA') + " | " + now.toLocaleTimeString('uk-UA');
         }
         setInterval(updateClock, 1000); updateClock();
 
@@ -109,16 +109,16 @@
         function gameLoop() {
             if(!active) return;
             ctx.clearRect(0, 0, 320, 400);
-            if(Math.random() < 0.04) items.push({ x: Math.random()*290, y: -20, bad: Math.random() < 0.2 });
+            if(Math.random() < 0.035) items.push({ x: Math.random()*290, y: -20, bad: Math.random() < 0.2 });
             ctx.fillStyle = "#ff9100";
             ctx.fillRect(basket.x, 375, basket.w, 10);
             for(let i = items.length - 1; i >= 0; i--) {
                 let it = items[i];
-                it.y += (4 + (score * 0.05));
+                it.y += (3.5 + (score * 0.05));
                 ctx.font = "24px Arial";
                 ctx.fillText(it.bad ? "👾" : "⚙️", it.x, it.y);
                 if(it.y > 365 && it.y < 385 && it.x > basket.x - 10 && it.x < basket.x + basket.w) {
-                    if(it.bad) { alert("ИГРА ОКОНЧЕНА! Ваш счет: " + score); toggleGame(); return; }
+                    if(it.bad) { alert("ГРУ ЗАКІНЧЕНО! Рахунок: " + score); toggleGame(); return; }
                     else { score++; scoreEl.innerText = "SCORE: " + score; items.splice(i, 1); continue; }
                 }
                 if(it.y > 410) items.splice(i, 1);
@@ -133,8 +133,13 @@
         }
 
         window.addEventListener('mousemove', e => { if(active) move(e.clientX); });
+        
+        /* ВИПРАВЛЕНО: Блокування скролінгу сторінки під час гри */
         cvs.addEventListener('touchmove', e => {
-            if(active) { move(e.touches[0].clientX); e.preventDefault(); }
+            if(active) { 
+                move(e.touches[0].clientX); 
+                e.preventDefault(); 
+            }
         }, {passive: false});
     </script>
 </body>
