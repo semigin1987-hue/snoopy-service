@@ -8,47 +8,57 @@
     <style>
         * { box-sizing: border-box; }
         body {
-            background: #0a0a0a linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('BG.JPG') no-repeat center center fixed;
+            /* Запасний чорний колір + картинка */
+            background-color: #0a0a0a; 
+            background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('BG.JPG');
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-attachment: fixed;
             background-size: cover;
             color: #e0e0e0;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             margin: 0; padding: 20px;
             display: flex; flex-direction: column; align-items: center; min-height: 100vh;
         }
 
         .header-left { align-self: flex-start; margin-bottom: 25px; }
-        .neon-logo { font-family: 'Orbitron', sans-serif; color: #00d4ff; text-transform: uppercase; text-shadow: 0 0 10px #00d4ff; font-size: clamp(1rem, 4vw, 1.3rem); }
-        .clock { color: #a020f0; font-family: 'Orbitron', sans-serif; font-size: 0.85rem; margin-top: 5px; opacity: 0.8; }
+        .neon-logo { font-family: 'Orbitron', sans-serif; color: #00d4ff; text-transform: uppercase; text-shadow: 0 0 10px #00d4ff; font-size: 1.2rem; }
+        .clock { color: #a020f0; font-family: 'Orbitron', sans-serif; font-size: 0.85rem; margin-top: 5px; }
 
         .main-layout { display: flex; flex-wrap: wrap; gap: 20px; width: 100%; max-width: 1000px; }
         .card { background: rgba(15, 15, 15, 0.95); border: 1px solid #333; border-radius: 25px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.7); }
         .price-container { flex: 2; min-width: 300px; }
-        .photo-aside { flex: 1.5; min-width: 280px; text-align: center; }
+        .photo-aside { flex: 1.2; min-width: 280px; text-align: center; }
 
-        h2 { font-family: 'Orbitron', sans-serif; color: #ff9100; margin-top: 0; text-transform: uppercase; font-size: 1.2rem; letter-spacing: 1px; }
+        h2 { font-family: 'Orbitron', sans-serif; color: #ff9100; margin-top: 0; text-transform: uppercase; font-size: 1.1rem; }
         .service-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .price { color: #00ff00; font-family: 'Orbitron', sans-serif; font-weight: 700; }
+        .price { color: #00ff00; font-family: 'Orbitron', sans-serif; font-weight: bold; }
 
-        .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
-        .work-img { width: 100%; height: 160px; object-fit: cover; border-radius: 15px; cursor: pointer; border: 1px solid #444; transition: all 0.3s ease; }
-        .work-img:hover { border-color: #ff9100; transform: translateY(-5px); box-shadow: 0 5px 15px rgba(255,145,0,0.3); }
+        .work-img { 
+            width: 100%; 
+            max-height: 400px; 
+            object-fit: cover; 
+            border-radius: 15px; 
+            border: 1px solid #444; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            margin-top: 10px;
+        }
+        .work-img:hover { border-color: #ff9100; transform: scale(1.02); }
         
-        /* Modal Viewer */
         #imgModal { display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; backdrop-filter: blur(8px); cursor: zoom-out; }
-        #imgModal img { max-width: 90%; max-height: 90%; border: 2px solid #ff9100; border-radius: 15px; box-shadow: 0 0 40px rgba(0,0,0,1); }
+        #imgModal img { max-width: 90%; max-height: 90%; border: 2px solid #ff9100; border-radius: 10px; }
 
-        /* Navigation & Game Buttons */
-        .btn-group { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 400px; margin-top: 30px; }
-        .btn { padding: 16px; border-radius: 50px; text-align: center; text-decoration: none; font-family: 'Orbitron', sans-serif; font-size: 0.85rem; font-weight: 700; cursor: pointer; border: 2px solid; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
-        .back-btn { color: #ff9100; border-color: #ff9100; background: transparent; }
-        .back-btn:hover { background: #ff9100; color: #000; box-shadow: 0 0 20px rgba(255,145,0,0.4); }
-        .game-btn { color: #ff0055; border-color: #ff0055; background: transparent; }
-        .game-btn:hover { background: #ff0055; color: #fff; box-shadow: 0 0 20px rgba(255,0,85,0.4); }
+        .btn-group { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 400px; margin-top: 25px; }
+        .btn { padding: 15px; border-radius: 40px; text-align: center; text-decoration: none; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: bold; cursor: pointer; border: 2px solid; transition: 0.3s; text-transform: uppercase; }
+        .back-btn { color: #ff9100; border-color: #ff9100; }
+        .back-btn:hover { background: #ff9100; color: #000; }
+        .game-btn { color: #ff0055; border-color: #ff0055; }
+        .game-btn:hover { background: #ff0055; color: #fff; }
 
-        /* Game Engine Visuals */
-        #game-section { display: none; margin: 20px 0; width: 320px; height: 420px; background: #000; border: 2px solid #ff0055; border-radius: 20px; position: relative; overflow: hidden; touch-action: none; box-shadow: 0 0 30px rgba(255,0,85,0.2); }
-        #gameCanvas { width: 100%; height: 100%; cursor: crosshair; }
-        #score { position: absolute; top: 15px; left: 20px; color: #00ff00; font-family: 'Orbitron', sans-serif; font-size: 1.1rem; z-index: 10; text-shadow: 0 0 5px #000; }
+        #game-section { display: none; margin-top: 20px; width: 320px; height: 400px; background: #000; border: 2px solid #ff0055; border-radius: 20px; position: relative; overflow: hidden; touch-action: none; }
+        #gameCanvas { width: 100%; height: 100%; }
+        #score { position: absolute; top: 10px; left: 15px; color: #00ff00; font-family: 'Orbitron', sans-serif; z-index: 10; }
     </style>
 </head>
 <body>
@@ -56,56 +66,48 @@
     <div id="imgModal" onclick="this.style.display='none'"><img id="fullImg" src=""></div>
 
     <div class="header-left">
-        <div class="neon-logo">Snoopy Digital Service</div>
+        <div class="neon-logo">Service by Snoopy</div>
         <div id="live-clock" class="clock">Завантаження...</div>
     </div>
 
     <div class="main-layout">
         <div class="card price-container">
-            <h2>Наші послуги</h2>
-            <div class="service-item"><span>Чистка + термопаста</span> <span class="price">від 600 ₴</span></div>
-            <div class="service-item"><span>Професійна збірка ПК</span> <span class="price">1000 ₴</span></div>
-            <div class="service-item"><span>Windows + Налаштування</span> <span class="price">650 ₴</span></div>
-            <div class="service-item"><span>Виїзд майстра</span> <span class="price">від 500 ₴</span></div>
+            <h2>Прайс послуг</h2>
+            <div class="service-item"><span>Чистка + паста</span> <span class="price">від 600 ₴</span></div>
+            <div class="service-item"><span>Збірка ПК</span> <span class="price">1000 ₴</span></div>
+            <div class="service-item"><span>Windows + Soft</span> <span class="price">650 ₴</span></div>
+            <div class="service-item"><span>Виїзд</span> <span class="price">від 500 ₴</span></div>
         </div>
 
-        <div class="card photo-aside">
-            <h2>Портфоліо</h2>
-            <div class="gallery">
-                <img src="phot01.jpg" class="work-img" onclick="showImg(this.src)" alt="Робота 1">
-                <img src="phot02.jpg" class="work-img" onclick="showImg(this.src)" alt="Робота 2">
-            </div>
-            <p style="font-size: 0.7rem; color: #666; margin-top: 15px;">Клікніть на фото для перегляду</p>
+        <div class="photo-aside">
+            <h2>Work</h2>
+            <img src="phot01.jpg" class="work-img" onclick="showImg(this.src)">
+            <p style="font-size: 0.75rem; color: #777; margin-top: 10px;">Натисніть для збільшення</p>
         </div>
     </div>
 
     <div class="btn-group">
-        <div class="btn game-btn" onclick="toggleGame()">🎮 Відпочити (Гра)</div>
-        <a href="index.html" class="btn back-btn">← Повернутися назад</a>
+        <div class="btn game-btn" onclick="toggleGame()">🎮 GAME MODE</div>
+        <a href="index.html" class="btn back-btn">← НА ГОЛОВНУ</a>
     </div>
 
     <div id="game-section">
-        <div id="score">GEARS: 0</div>
+        <div id="score">SCORE: 0</div>
         <canvas id="gameCanvas"></canvas>
     </div>
 
     <script>
-        // Gallery Viewer
         function showImg(src) { 
-            const img = document.getElementById('fullImg');
-            img.src = src; 
+            document.getElementById('fullImg').src = src; 
             document.getElementById('imgModal').style.display = 'flex'; 
         }
         
-        // Digital Clock
         function updateClock() {
             let now = new Date();
             document.getElementById('live-clock').innerText = now.toLocaleDateString('uk-UA') + " | " + now.toLocaleTimeString('uk-UA');
         }
-        setInterval(updateClock, 1000); 
-        updateClock();
+        setInterval(updateClock, 1000); updateClock();
 
-        // Game Engine Logic
         const cvs = document.getElementById('gameCanvas');
         const ctx = cvs.getContext('2d');
         const scoreEl = document.getElementById('score');
@@ -115,8 +117,8 @@
             active = !active;
             document.getElementById('game-section').style.display = active ? 'block' : 'none';
             if(active) { 
-                cvs.width = 320; cvs.height = 420; 
-                score = 0; scoreEl.innerText = "GEARS: 0";
+                cvs.width = 320; cvs.height = 400; 
+                score = 0; scoreEl.innerText = "SCORE: 0";
                 items = []; 
                 requestAnimationFrame(gameLoop); 
             }
@@ -124,57 +126,34 @@
 
         function gameLoop() {
             if(!active) return;
-            ctx.clearRect(0, 0, cvs.width, cvs.height);
-            
-            // Generate items
-            if(Math.random() < 0.04) {
-                items.push({ x: Math.random()*290, y: -30, bad: Math.random() < 0.25 });
-            }
-            
-            // Draw Paddle
+            ctx.clearRect(0, 0, 320, 400);
+            if(Math.random() < 0.03) items.push({ x: Math.random()*290, y: -20, bad: Math.random() < 0.2 });
             ctx.fillStyle = "#ff9100";
-            ctx.fillRect(basket.x, cvs.height - 30, basket.w, 10);
-            ctx.strokeStyle = "#fff";
-            ctx.strokeRect(basket.x, cvs.height - 30, basket.w, 10);
+            ctx.fillRect(basket.x, 375, basket.w, 10);
 
-            // Item Physics
             for(let i = items.length - 1; i >= 0; i--) {
                 let it = items[i];
-                it.y += (3 + score * 0.1); // Speed increases with score
-                
-                ctx.font = "26px Arial";
+                it.y += 3.5;
+                ctx.font = "24px Arial";
                 ctx.fillText(it.bad ? "👾" : "⚙️", it.x, it.y);
 
-                // Collision Check
-                if(it.y > cvs.height - 45 && it.y < cvs.height - 15 && it.x > basket.x - 15 && it.x < basket.x + basket.w) {
-                    if(it.bad) { 
-                        alert("GAME OVER! Твій результат: " + score); 
-                        toggleGame(); 
-                        return;
-                    } else {
-                        score++;
-                        scoreEl.innerText = "GEARS: " + score;
-                        items.splice(i, 1);
-                        continue;
-                    }
+                if(it.y > 365 && it.y < 385 && it.x > basket.x - 10 && it.x < basket.x + basket.w) {
+                    if(it.bad) { alert("BOOM! Score: " + score); toggleGame(); return; }
+                    else { score++; scoreEl.innerText = "SCORE: " + score; items.splice(i, 1); continue; }
                 }
-                if(it.y > cvs.height + 20) items.splice(i, 1);
+                if(it.y > 410) items.splice(i, 1);
             }
             requestAnimationFrame(gameLoop);
         }
 
-        // Controls
-        function moveHandler(clientX) {
+        function move(clientX) {
             let rect = cvs.getBoundingClientRect();
-            let x = (clientX - rect.left) - basket.w/2;
-            basket.x = Math.max(0, Math.min(cvs.width - basket.w, x));
+            let x = clientX - rect.left - basket.w/2;
+            basket.x = Math.max(0, Math.min(320 - basket.w, x));
         }
 
-        window.addEventListener('mousemove', e => moveHandler(e.clientX));
-        cvs.addEventListener('touchmove', e => {
-            moveHandler(e.touches[0].clientX);
-            e.preventDefault();
-        }, {passive: false});
+        window.addEventListener('mousemove', e => move(e.clientX));
+        cvs.addEventListener('touchmove', e => { move(e.touches[0].clientX); e.preventDefault(); }, {passive: false});
     </script>
 </body>
 </html>
