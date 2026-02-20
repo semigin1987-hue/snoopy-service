@@ -6,8 +6,7 @@
     <title>Snoopy Service - Послуги</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; scroll-behavior: smooth; } /* Плавний скрол по всій сторінці */
-        
+        * { box-sizing: border-box; scroll-behavior: smooth; }
         body {
             background-color: #0a0a0a;
             background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('BG.JPG');
@@ -17,24 +16,21 @@
             color: #e0e0e0;
             font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
-            padding: 20px 20px 80px 20px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
         }
-
         .logo-top-left {
             align-self: flex-start;
             font-family: 'Orbitron', sans-serif;
             font-size: clamp(0.7rem, 4vw, 1rem);
             color: #00d4ff;
             opacity: 0.5;
-            margin-bottom: 30px;
-            letter-spacing: 2px;
+            margin-bottom: 20px;
             text-transform: uppercase;
         }
-
         .main-layout {
             display: flex;
             flex-wrap: wrap;
@@ -42,100 +38,32 @@
             width: 100%;
             max-width: 1000px;
             align-items: flex-start;
-            margin-bottom: 20px;
         }
-
         .price-container, .photo-aside {
             background: rgba(15, 15, 15, 0.95);
             border: 1px solid #333;
             border-radius: 25px;
             padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-
-        .price-container { flex: 2; min-width: 320px; }
-        .photo-aside { flex: 1; min-width: 250px; margin-top: 45px; }
-
-        h2 { 
-            font-family: 'Orbitron', sans-serif;
-            color: #ff9100; 
-            text-transform: uppercase; 
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-        }
-
+        .price-container { flex: 2; min-width: 300px; }
+        .photo-aside { flex: 1; min-width: 250px; }
+        h2 { font-family: 'Orbitron', sans-serif; color: #ff9100; text-transform: uppercase; font-size: 1.2rem; }
         .service-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .price { font-family: 'Orbitron', sans-serif; color: #00ff00; font-weight: bold; }
-
-        /* КНОПКИ КЕРУВАННЯ */
-        .btn-row { 
-            display: flex; 
-            flex-direction: column; /* На мобілках одна під одною */
-            gap: 15px; 
-            width: 100%; 
-            max-width: 500px; 
-            margin-top: 20px; 
-        }
-
+        
+        .btn-row { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 400px; margin-top: 30px; }
         .back-btn, .game-toggle-btn {
-            padding: 18px;
-            text-decoration: none;
-            border-radius: 50px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.9rem;
-            font-weight: bold;
-            text-align: center;
-            transition: 0.3s;
-            cursor: pointer;
-            text-transform: uppercase;
-            border: 2px solid;
+            padding: 15px; text-decoration: none; border-radius: 50px; font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem; font-weight: bold; text-align: center; cursor: pointer; text-transform: uppercase; border: 2px solid;
         }
+        .back-btn { color: #ff9100; border-color: #ff9100; background: transparent; }
+        .back-btn:hover { background: #ff9100; color: #000; }
+        .game-toggle-btn { color: #ff0055; border-color: #ff0055; background: transparent; }
+        .game-toggle-btn:hover { background: #ff0055; color: #fff; }
 
-        /* ОНОВЛЕНА ПОМАРАНЧЕВА КНОПКА НА ГОЛОВНУ */
-        .back-btn { 
-            color: #ff9100; 
-            border-color: #ff9100; 
-            background: transparent; 
-        }
-        .back-btn:hover { 
-            background: #ff9100; 
-            color: #000; 
-            box-shadow: 0 0 15px rgba(255, 145, 0, 0.4);
-        }
-
-        .game-toggle-btn { 
-            color: #ff0055; 
-            border-color: #ff0055; 
-            background: transparent; 
-        }
-        .game-toggle-btn:hover { 
-            background: #ff0055; 
-            color: #fff; 
-            box-shadow: 0 0 20px rgba(255, 0, 85, 0.5);
-        }
-
-        /* СЕКЦІЯ ГРИ */
-        #game-section {
-            display: none;
-            width: 100%;
-            max-width: 400px;
-            height: 450px;
-            background: #000;
-            border: 2px solid #ff0055;
-            border-radius: 25px;
-            margin-top: 40px;
-            position: relative;
-            overflow: hidden;
-            touch-action: none;
-        }
-
+        #game-section { display: none; width: 100%; max-width: 400px; height: 400px; background: #000; border: 2px solid #ff0055; border-radius: 25px; margin-top: 20px; position: relative; overflow: hidden; touch-action: none; }
         #gameCanvas { width: 100%; height: 100%; }
-        #score-board { position: absolute; top: 15px; left: 15px; font-family: 'Orbitron', sans-serif; color: #00ff00; font-size: 0.9rem; }
-
-        @media (max-width: 768px) {
-            .main-layout { flex-direction: column; }
-            .photo-aside { margin-top: 0; width: 100%; }
-        }
+        #score-board { position: absolute; top: 10px; left: 10px; font-family: 'Orbitron', sans-serif; color: #00ff00; }
     </style>
 </head>
 <body>
@@ -148,15 +76,10 @@
             <div class="service-item"><span>Чистка + паста</span> <span class="price">500 ₴</span></div>
             <div class="service-item"><span>Збірка ПК</span> <span class="price">1000 ₴</span></div>
             <div class="service-item"><span>Windows + Soft</span> <span class="price">450 ₴</span></div>
-            <div class="service-item"><span>Оптимізація</span> <span class="price">300 ₴</span></div>
         </div>
-
         <div class="photo-aside">
             <h2>Work</h2>
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-                <img src="WORK1.JPG" alt="Work 1" style="width: 100%; border-radius: 15px; border: 1px solid #333;">
-                <p style="font-size: 0.7rem; color: #666; text-align: center;">Галерея робіт</p>
-            </div>
+            <img src="WORK1.JPG" alt="Work" style="width: 100%; border-radius: 15px;">
         </div>
     </div>
 
@@ -165,4 +88,69 @@
         <a href="index.html" class="back-btn">← НА ГОЛОВНУ</a>
     </div>
 
-    <div id="game-
+    <div id="game-section">
+        <div id="score-board">SCORE: 0</div>
+        <canvas id="gameCanvas"></canvas>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const gameSection = document.getElementById('game-section');
+        let gameActive = false, score = 0, items = [];
+        let basket = { x: 0, y: 0, w: 70, h: 10 };
+
+        function toggleGame() {
+            gameActive = !gameActive;
+            gameSection.style.display = gameActive ? 'block' : 'none';
+            if (gameActive) {
+                resize();
+                reset();
+                setTimeout(() => gameSection.scrollIntoView({ behavior: 'smooth' }), 100);
+                requestAnimationFrame(loop);
+            }
+        }
+
+        function resize() {
+            canvas.width = gameSection.offsetWidth;
+            canvas.height = gameSection.offsetHeight;
+            basket.y = canvas.height - 30;
+            basket.x = canvas.width / 2 - 35;
+        }
+
+        function reset() { score = 0; items = []; updateScore(); }
+        function updateScore() { document.getElementById('score-board').innerText = 'SCORE: ' + score; }
+
+        function loop() {
+            if (!gameActive) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (Math.random() < 0.03) items.push({ x: Math.random()*(canvas.width-20), y: -20, v: Math.random()<0.3 });
+            
+            ctx.fillStyle = '#ff9100';
+            ctx.fillRect(basket.x, basket.y, basket.w, basket.h);
+
+            items.forEach((item, i) => {
+                item.y += 4;
+                ctx.font = '20px Arial';
+                ctx.fillText(item.v ? '👾' : '⚙️', item.x, item.y);
+                if (item.y > basket.y && item.x > basket.x && item.x < basket.x + basket.w) {
+                    if (item.v) { alert('GAME OVER! Score: ' + score); toggleGame(); }
+                    else { score++; updateScore(); items.splice(i, 1); }
+                }
+                if (item.y > canvas.height) items.splice(i, 1);
+            });
+            requestAnimationFrame(loop);
+        }
+
+        function move(e) {
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+            basket.x = Math.max(0, Math.min(canvas.width - basket.w, x - basket.w/2));
+        }
+
+        gameSection.addEventListener('mousemove', move);
+        gameSection.addEventListener('touchmove', (e) => { move(e); e.preventDefault(); }, {passive: false});
+        window.onresize = resize;
+    </script>
+</body>
+</html>
