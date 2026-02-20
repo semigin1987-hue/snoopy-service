@@ -78,9 +78,7 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.8); 
             -webkit-backdrop-filter: blur(15px);
             backdrop-filter: blur(15px);
-            /* Ускорение для устранения размытости текста */
             transform: translateZ(0);
-            -webkit-transform: translateZ(0);
         }
 
         .price-container { flex: 2; min-width: 300px; }
@@ -89,13 +87,12 @@
         h2 { font-family: 'Orbitron', sans-serif; color: #ff9100; margin-top: 0; text-transform: uppercase; font-size: 1.1rem; }
         .service-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); align-items: center; }
         
-        /* МАКСИМАЛЬНО ЧЕТКИЕ ЦЕНЫ */
         .price { 
             color: #00ff00 !important; 
             font-family: 'Orbitron', sans-serif; 
             font-weight: 800; 
             font-size: 1.1rem;
-            text-shadow: none; /* Убрали тень для четкости */
+            text-shadow: none; 
             letter-spacing: 0.5px;
             -webkit-font-smoothing: antialiased;
             display: inline-block;
@@ -155,4 +152,81 @@
             <div class="gallery">
                 <img src="phot01.jpg" class="work-img" onclick="showImg(this.src)">
                 <img src="photo777.png" class="work-img" onclick="showImg(this.src)" onerror="this.src='phot01.jpg'">
-                <img src="photo888.jpg" class="work-img" onclick="showImg(this.src)" onerror="this.src='phot
+                <img src="photo888.jpg" class="work-img" onclick="showImg(this.src)" onerror="this.src='phot01.jpg'">
+                <img src="gemini1.png" class="work-img" onclick="showImg(this.src)" onerror="this.src='phot01.jpg'">
+            </div>
+        </div>
+    </div>
+
+    <div class="btn-group">
+        <div class="btn game-btn" onclick="toggleGame()">🎮 РЕЖИМ ГРИ</div>
+        <a href="index.html" class="btn back-btn">← НА ГОЛОВНУ</a>
+    </div>
+
+    <div id="game-section">
+        <div id="score">SCORE: 0</div>
+        <canvas id="gameCanvas"></canvas>
+    </div>
+
+    <script>
+        function showImg(src) { 
+            document.getElementById('fullImg').src = src; 
+            document.getElementById('imgModal').style.display = 'flex'; 
+        }
+        
+        function updateClock() {
+            let now = new Date();
+            let date = now.toLocaleDateString('uk-UA');
+            let time = now.toLocaleTimeString('uk-UA');
+            document.getElementById('live-clock').innerHTML = `${date} | <span style="color: #fff;">${time}</span>`;
+        }
+        setInterval(updateClock, 1000); 
+        updateClock();
+
+        const cvs = document.getElementById('gameCanvas');
+        const ctx = cvs.getContext('2d');
+        const scoreEl = document.getElementById('score');
+        let active = false, score = 0, items = [], basket = { x: 125, w: 70 };
+
+        function toggleGame() {
+            active = !active;
+            document.getElementById('game-section').style.display = active ? 'block' : 'none';
+            if(active) { 
+                cvs.width = 320; cvs.height = 400; score = 0; scoreEl.innerText = "SCORE: 0"; items = []; 
+                requestAnimationFrame(gameLoop); 
+            }
+        }
+
+        function gameLoop() {
+            if(!active) return;
+            ctx.clearRect(0, 0, 320, 400);
+            if(Math.random() < 0.035) items.push({ x: Math.random()*290, y: -20, bad: Math.random() < 0.2 });
+            ctx.fillStyle = "#ff9100";
+            ctx.fillRect(basket.x, 375, basket.w, 10);
+            for(let i = items.length - 1; i >= 0; i--) {
+                let it = items[i];
+                it.y += (3.5 + (score * 0.05));
+                ctx.font = "24px Arial";
+                ctx.fillText(it.bad ? "👾" : "⚙️", it.x, it.y);
+                if(it.y > 365 && it.y < 385 && it.x > basket.x - 10 && it.x < basket.x + basket.w) {
+                    if(it.bad) { alert("ГРУ ЗАКІНЧЕНО! Рахунок: " + score); toggleGame(); return; }
+                    else { score++; scoreEl.innerText = "SCORE: " + score; items.splice(i, 1); continue; }
+                }
+                if(it.y > 410) items.splice(i, 1);
+            }
+            requestAnimationFrame(gameLoop);
+        }
+
+        function move(clientX) {
+            let rect = cvs.getBoundingClientRect();
+            let x = clientX - rect.left - basket.w/2;
+            basket.x = Math.max(0, Math.min(320 - basket.w, x));
+        }
+
+        window.addEventListener('mousemove', e => { if(active) move(e.clientX); });
+        cvs.addEventListener('touchmove', e => {
+            if(active) { move(e.touches[0].clientX); e.preventDefault(); }
+        }, {passive: false});
+    </script>
+</body>
+</html>
