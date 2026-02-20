@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snoopy Service - Послуги</title>
+    <title>Snoopy Service - Галерея та Послуги</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; scroll-behavior: smooth; }
@@ -46,9 +46,8 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         .price-container { flex: 2; min-width: 300px; }
-        
-        /* Галерея на два фото */
         .photo-aside { flex: 1.5; min-width: 300px; text-align: center; }
+
         .gallery-grid { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
@@ -60,7 +59,6 @@
         .service-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .price { color: #00ff00; font-weight: bold; font-family: 'Orbitron', sans-serif; }
 
-        /* Стиль фото у списку */
         .work-img { 
             width: 100%; 
             height: 180px; 
@@ -70,9 +68,8 @@
             cursor: pointer; 
             transition: 0.3s; 
         }
-        .work-img:hover { transform: scale(1.05); border-color: #ff9100; z-index: 2; box-shadow: 0 0 15px rgba(255,145,0,0.2); }
+        .work-img:hover { transform: scale(1.05); border-color: #ff9100; z-index: 2; }
 
-        /* Модальне вікно для перегляду */
         .modal {
             display: none; position: fixed; z-index: 9999; top: 0; left: 0;
             width: 100%; height: 100%; background: rgba(0,0,0,0.95);
@@ -81,14 +78,12 @@
         }
         .modal img { max-width: 95%; max-height: 95%; border: 2px solid #ff9100; border-radius: 10px; }
 
-        /* Кнопки та гра */
         .btn-row { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 400px; margin-top: 30px; }
         .back-btn, .game-toggle-btn {
             padding: 15px; text-decoration: none; border-radius: 50px; font-family: 'Orbitron', sans-serif;
             font-size: 0.8rem; text-align: center; cursor: pointer; border: 2px solid; transition: 0.3s; font-weight: bold;
         }
         .back-btn { color: #ff9100; border-color: #ff9100; }
-        .back-btn:hover { background: #ff9100; color: #000; }
         .game-toggle-btn { color: #ff0055; border-color: #ff0055; }
         .game-toggle-btn:hover { background: #ff0055; color: #fff; }
 
@@ -98,7 +93,6 @@
         
         .mute-btn { position: fixed; bottom: 20px; right: 20px; background: rgba(255,145,0,0.1); border: 1px solid #ff9100; color: #ff9100; border-radius: 50%; width: 45px; height: 45px; cursor: pointer; z-index: 1000; }
 
-        /* Адаптивність для мобільних */
         @media (max-width: 600px) {
             .gallery-grid { grid-template-columns: 1fr; }
             .work-img { height: 220px; }
@@ -131,7 +125,7 @@
                 <img src="phot01.jpg" alt="Work 1" class="work-img" onclick="openModal(this.src)">
                 <img src="phot02.jpg" alt="Work 2" class="work-img" onclick="openModal(this.src)">
             </div>
-            <p style="font-size: 0.7rem; color: #777; margin-top: 15px;">Натисніть на фото для збільшення</p>
+            <p style="font-size: 0.7rem; color: #777; margin-top: 15px;">Клікніть для збільшення</p>
         </div>
     </div>
 
@@ -151,11 +145,15 @@
     <button class="mute-btn" onclick="toggleMute()">🔊</button>
 
     <script>
+        // ФОТО МОДАЛКА
         function openModal(src) {
-            document.getElementById('fullImg').src = src;
-            document.getElementById('imgModal').style.display = 'flex';
+            const modal = document.getElementById('imgModal');
+            const fullImg = document.getElementById('fullImg');
+            fullImg.src = src;
+            modal.style.display = 'flex';
         }
 
+        // ГОДИННИК
         function updateClock() {
             const now = new Date();
             document.getElementById('live-clock').innerText = now.toLocaleDateString('uk-UA') + ' | ' + now.toLocaleTimeString('uk-UA');
@@ -163,6 +161,7 @@
         setInterval(updateClock, 1000);
         updateClock();
 
+        // ГРА (ПОВНІСТЮ ВИПРАВЛЕНА)
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         const gameSection = document.getElementById('game-section');
@@ -180,6 +179,7 @@
                 requestAnimationFrame(loop);
             } else {
                 music.pause();
+                items = [];
             }
         }
 
@@ -189,10 +189,62 @@
         }
 
         function resize() {
-            canvas.width = gameSection.offsetWidth;
-            canvas.height = gameSection.offsetHeight;
+            canvas.width = gameSection.clientWidth;
+            canvas.height = gameSection.clientHeight;
             basket.y = canvas.height - 30;
             basket.x = canvas.width / 2 - 35;
         }
 
         function reset() { score = 0; items = []; updateScore(); }
+        function updateScore() { document.getElementById('score-board').innerText = 'SCORE: ' + score; }
+
+        function loop() {
+            if (!gameActive) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            if (Math.random() < 0.03) {
+                items.push({ x: Math.random()*(canvas.width-30), y: -30, v: Math.random() < 0.2 });
+            }
+
+            ctx.fillStyle = '#ff9100';
+            ctx.fillRect(basket.x, basket.y, basket.w, basket.h);
+
+            for (let i = items.length - 1; i >= 0; i--) {
+                let item = items[i];
+                item.y += 3;
+                
+                ctx.font = '24px Arial';
+                ctx.fillText(item.v ? '👾' : '⚙️', item.x, item.y);
+
+                if (item.y > basket.y - 10 && item.y < basket.y + 15 && 
+                    item.x > basket.x - 20 && item.x < basket.x + basket.w) {
+                    if (item.v) {
+                        alert('BOOM! SCORE: ' + score);
+                        toggleGame();
+                        return;
+                    } else {
+                        score++;
+                        updateScore();
+                        items.splice(i, 1);
+                        continue;
+                    }
+                }
+                if (item.y > canvas.height) items.splice(i, 1);
+            }
+            requestAnimationFrame(loop);
+        }
+
+        function handleMove(e) {
+            if (!gameActive) return;
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            let targetX = (clientX - rect.left) - basket.w/2;
+            basket.x = Math.max(0, Math.min(canvas.width - basket.w, targetX));
+        }
+
+        window.addEventListener('mousemove', handleMove);
+        window.addEventListener('touchmove', (e) => { handleMove(e); e.preventDefault(); }, {passive: false});
+        window.onresize = resize;
+    </script>
+</body>
+</html>
