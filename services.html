@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snoopy Service - Ціни</title>
+    <title>Snoopy Service - Послуги</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
@@ -18,30 +18,38 @@
             font-family: 'Orbitron', sans-serif;
             margin: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             min-height: 100vh;
             padding: 20px;
+            overflow-x: hidden;
         }
 
         .container {
             width: 100%;
-            max-width: 500px;
+            max-width: 600px;
             background: rgba(0, 0, 0, 0.85);
             border-radius: 30px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(15px);
             padding: 30px;
             box-shadow: 0 0 40px rgba(0, 0, 0, 1);
+            margin-bottom: 30px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         h2 {
             text-align: center;
             text-transform: uppercase;
             letter-spacing: 5px;
-            color: #a020f0; /* Бузковий, як на головній */
+            color: #a020f0; /* Твій новий бузковий */
             margin-bottom: 30px;
-            text-shadow: 0 0 10px rgba(160, 32, 240, 0.5);
+            text-shadow: 0 0 15px rgba(160, 32, 240, 0.6);
         }
 
         .price-list {
@@ -56,6 +64,12 @@
             align-items: center;
             padding: 15px 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: 0.3s;
+        }
+
+        .price-item:hover {
+            background: rgba(255, 255, 255, 0.02);
+            padding-left: 10px;
         }
 
         .service-name {
@@ -64,68 +78,88 @@
             letter-spacing: 1px;
         }
 
-        /* ТІ САМІ ЯСКРАВІ ЗЕЛЕНІ ЦІНИ */
         .service-price {
             font-weight: 700;
-            color: #00ff88;
-            text-shadow: 
-                0 0 8px rgba(0, 255, 136, 0.6),
-                0 0 15px rgba(0, 255, 136, 0.3);
+            color: #00ff88; /* Яскраво-зелений неон */
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
             white-space: nowrap;
-            margin-left: 15px;
+        }
+
+        /* БЛОК ГРИ */
+        .game-section {
+            width: 100%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            border: 1px dashed rgba(160, 32, 240, 0.3);
+        }
+
+        #game-canvas {
+            background: #111;
+            border: 2px solid #a020f0;
+            border-radius: 10px;
+            display: block;
+            margin: 20px auto;
+            max-width: 100%;
+            cursor: crosshair;
         }
 
         .back-btn {
-            display: block;
-            text-align: center;
-            margin-top: 30px;
+            display: inline-block;
+            margin-top: 20px;
             text-decoration: none;
             color: #ffffff;
             font-size: 0.8rem;
             letter-spacing: 2px;
             text-transform: uppercase;
-            padding: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px 30px;
+            border: 1px solid #a020f0;
             border-radius: 50px;
             transition: 0.3s;
         }
 
         .back-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: #ffffff;
+            background: #a020f0;
+            box-shadow: 0 0 20px rgba(160, 32, 240, 0.4);
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h2>Прайс-лист</h2>
+        <h2>Наші Послуги</h2>
         
         <ul class="price-list">
-            <li class="price-item">
-                <span class="service-name">Діагностика</span>
-                <span class="service-price">Безкоштовно</span>
-            </li>
-            <li class="price-item">
-                <span class="service-name">Чистка та заміна термопасти</span>
-                <span class="service-price">від 600 грн</span>
-            </li>
-            <li class="price-item">
-                <span class="service-name">Встановлення Windows + Drivers</span>
-                <span class="service-price">від 650 грн</span>
-            </li>
-            <li class="price-item">
-                <span class="service-name">Заміна екрану ноутбука (робота)</span>
-                <span class="service-price">від 600 грн</span>
-            </li>
-            <li class="price-item">
-                <span class="service-name">Ремонт материнської плати</span>
-                <span class="service-price">від 800 грн</span>
-            </li>
+            <li class="price-item"><span class="service-name">Діагностика</span><span class="service-price">БЕЗКОШТОВНО</span></li>
+            <li class="price-item"><span class="service-name">Чистка + термопаста</span><span class="service-price">400 грн</span></li>
+            <li class="price-item"><span class="service-name">Встановлення Windows</span><span class="service-price">500 грн</span></li>
+            <li class="price-item"><span class="service-name">Ремонт після залиття</span><span class="service-price">від 800 грн</span></li>
+            <li class="price-item"><span class="service-name">Збірка ПК під ключ</span><span class="service-price">від 1000 грн</span></li>
         </ul>
 
-        <a href="index.html" class="back-btn">Назад</a>
+        <a href="index.html" class="back-btn">Назад до меню</a>
     </div>
 
-</body>
-</html>
+    <div class="game-section">
+        <p style="color: #a020f0; font-size: 0.8rem;">Відпочинь, поки ми чинимо: Клікай по цілі!</p>
+        <canvas id="game-canvas" width="300" height="200"></canvas>
+        <p>Рахунок: <span id="score" style="color: #00ff88;">0</span></p>
+    </div>
+
+    <script>
+        // Проста міні-гра (Клікер)
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        let score = 0;
+        let target = { x: 150, y: 100, radius: 15 };
+
+        function drawTarget() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.arc(target.x, target.y, target.radius, 0, Math.PI * 2);
+            ctx.fillStyle = "#00ff88";
+            ctx.fill();
+            ctx.strokeStyle = "#ffffff
