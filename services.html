@@ -1,11 +1,13 @@
-<!DOCTYPE html>
+в<!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Послуги - Snoopy Service</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <title>Snoopy Service - Послуги</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        * { box-sizing: border-box; }
+        
         body {
             background-color: #0a0a0a;
             background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('BG.JPG');
@@ -15,102 +17,100 @@
             color: #e0e0e0;
             font-family: 'Segoe UI', Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 20px 20px 80px 20px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
             min-height: 100vh;
-            position: relative; /* Чтобы логотип позиционировался относительно края страницы */
         }
 
-        /* КРУТОЙ ЛОГОТИП СЛЕВА СВЕРХУ */
         .logo-top-left {
-            position: absolute;
-            top: 20px;
-            left: 20px;
+            align-self: flex-start;
             font-family: 'Orbitron', sans-serif;
-            font-size: 1rem;
-            color: #00d4ff; /* Голубой как на главной */
+            font-size: clamp(0.7rem, 4vw, 1rem);
+            color: #00d4ff;
+            opacity: 0.5;
+            margin-bottom: 30px;
             letter-spacing: 2px;
             text-transform: uppercase;
-            opacity: 0.6; /* Матовый эффект (полупрозрачность) */
         }
 
-        .container {
-            width: 100%;
-            max-width: 500px;
-            background: rgba(20, 20, 20, 0.95);
-            border: 2px solid #333;
-            border-radius: 25px;
-            padding: 35px;
-            align-self: center;
-            margin-top: 40px; /* Чтобы не наезжало на логотип на мобилках */
-        }
-
-        h2 {
-            color: #ff9100;
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 30px;
-        }
-
-        .category-title {
-            color: #00d4ff;
-            font-size: 1rem;
-            margin-top: 25px;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.8;
-        }
-
-        .service-item {
+        .main-layout {
             display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            flex-wrap: wrap;
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
+            align-items: flex-start;
+            margin-bottom: 40px;
         }
 
-        .price {
-            color: #00ff00;
-            font-weight: bold;
+        .price-container, .photo-aside {
+            background: rgba(15, 15, 15, 0.95);
+            border: 1px solid #333;
+            border-radius: 25px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        .back-btn {
-            display: block;
+        .price-container { flex: 2; min-width: 320px; }
+        .photo-aside { flex: 1; min-width: 250px; margin-top: 45px; }
+
+        h2 { 
+            font-family: 'Orbitron', sans-serif;
+            color: #ff9100; 
+            text-transform: uppercase; 
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .service-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .price { font-family: 'Orbitron', sans-serif; color: #00ff00; font-weight: bold; }
+
+        /* КНОПКИ КЕРУВАННЯ */
+        .btn-row { display: flex; gap: 15px; width: 100%; max-width: 1000px; margin-top: 20px; }
+
+        .back-btn, .game-toggle-btn {
+            flex: 1;
             padding: 15px;
-            margin-top: 40px;
-            background: transparent;
-            color: #ff9100;
-            border: 2px solid #ff9100;
             text-decoration: none;
-            font-weight: bold;
             border-radius: 50px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            font-weight: bold;
             text-align: center;
             transition: 0.3s;
+            cursor: pointer;
             text-transform: uppercase;
         }
 
-        .back-btn:hover {
-            background: #ff9100;
-            color: #000;
-            transform: scale(1.02);
+        .back-btn { color: #fff; border: 2px solid #555; background: transparent; }
+        .back-btn:hover { background: #fff; color: #000; }
+
+        .game-toggle-btn { color: #ff0055; border: 2px solid #ff0055; background: transparent; box-shadow: 0 0 10px rgba(255, 0, 85, 0.2); }
+        .game-toggle-btn:hover { background: #ff0055; color: #fff; box-shadow: 0 0 20px rgba(255, 0, 85, 0.5); }
+
+        /* СЕКЦІЯ ГРИ */
+        #game-section {
+            display: none;
+            width: 100%;
+            max-width: 400px;
+            height: 450px;
+            background: #000;
+            border: 2px solid #ff0055;
+            border-radius: 25px;
+            margin-top: 30px;
+            position: relative;
+            overflow: hidden;
+            touch-action: none;
         }
 
-        .footer-note {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.8rem;
-            color: #666;
-        }
+        #gameCanvas { width: 100%; height: 100%; }
+        #score-board { position: absolute; top: 15px; left: 15px; font-family: 'Orbitron', sans-serif; color: #00ff00; font-size: 0.9rem; }
 
-        /* Для мобильных устройств, чтобы логотип был чуть меньше */
-        @media (max-width: 480px) {
-            .logo-top-left {
-                font-size: 0.7rem;
-                top: 10px;
-                left: 10px;
-            }
+        @media (max-width: 768px) {
+            .main-layout { flex-direction: column; }
+            .photo-aside { margin-top: 0; width: 100%; }
         }
     </style>
 </head>
@@ -118,25 +118,127 @@
 
     <div class="logo-top-left">Service by Snoopy</div>
 
-    <div class="container">
-        <h2>Прайс послуг</h2>
+    <div class="main-layout">
+        <div class="price-container">
+            <h2>Прайс послуг</h2>
+            <div class="service-item"><span>Чистка + паста</span> <span class="price">500 ₴</span></div>
+            <div class="service-item"><span>Збірка ПК</span> <span class="price">1000 ₴</span></div>
+            <div class="service-item"><span>Windows + Soft</span> <span class="price">450 ₴</span></div>
+        </div>
 
-        <div class="category-title">⚙️ ЗАЛІЗО</div>
-        <div class="service-item"><span>Чистка + термопаста</span> <span class="price">від 500 грн</span></div>
-        <div class="service-item"><span>Збірка ПК</span> <span class="price">від 1000 грн</span></div>
-        <div class="service-item"><span>Заміна комплектуючих</span> <span class="price">250 грн</span></div>
-
-        <div class="category-title">💻 СОФТ</div>
-        <div class="service-item"><span>Windows + драйвери</span> <span class="price">450 грн</span></div>
-        <div class="service-item"><span>Оптимізація системи</span> <span class="price">300 грн</span></div>
-
-        <div class="category-title">🚗 ВИЇЗД</div>
-        <div class="service-item"><span>Виклик майстра</span> <span class="price">від 200 грн</span></div>
-
-        <a href="index.html" class="back-btn">← НА ГОЛОВНУ</a>
-        
-        <div class="footer-note">🛡️ Гарантія на всі види робіт</div>
+        <div class="photo-aside">
+            <h2>Work</h2>
+            <div style="display: flex; gap: 10px;">
+                <img src="WORK1.JPG" alt="1" style="width: 100%; border-radius: 10px;">
+            </div>
+        </div>
     </div>
+
+    <div class="btn-row">
+        <a href="index.html" class="back-btn">← НА ГОЛОВНУ</a>
+        <div class="game-toggle-btn" onclick="toggleGame()">🎮 GAME MODE</div>
+    </div>
+
+    <div id="game-section">
+        <div id="score-board">SCORE: 0</div>
+        <canvas id="gameCanvas"></canvas>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const gameSection = document.getElementById('game-section');
+        let gameActive = false;
+        let score = 0;
+        let basket = { x: 170, y: 400, w: 70, h: 10 };
+        let items = [];
+
+        function toggleGame() {
+            gameActive = !gameActive;
+            gameSection.style.display = gameActive ? 'block' : 'none';
+            if (gameActive) {
+                resizeCanvas();
+                resetGame();
+                requestAnimationFrame(update);
+            }
+        }
+
+        function resizeCanvas() {
+            canvas.width = gameSection.offsetWidth;
+            canvas.height = gameSection.offsetHeight;
+            basket.y = canvas.height - 30;
+        }
+
+        function resetGame() {
+            score = 0;
+            items = [];
+            updateScore();
+        }
+
+        function updateScore() {
+            document.getElementById('score-board').innerText = 'SCORE: ' + score;
+        }
+
+        function spawnItem() {
+            if (Math.random() < 0.03) {
+                const isVirus = Math.random() < 0.3;
+                items.push({
+                    x: Math.random() * (canvas.width - 20),
+                    y: -20,
+                    size: 25,
+                    speed: 3 + (score / 10),
+                    isVirus: isVirus
+                });
+            }
+        }
+
+        function update() {
+            if (!gameActive) return;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            spawnItem();
+
+            // Кошик майстра
+            ctx.fillStyle = '#ff9100';
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = '#ff9100';
+            ctx.fillRect(basket.x, basket.y, basket.w, basket.h);
+            ctx.shadowBlur = 0;
+
+            items.forEach((item, i) => {
+                item.y += item.speed;
+                ctx.font = '20px Arial';
+                ctx.fillText(item.isVirus ? '👾' : '⚙️', item.x, item.y);
+
+                // Колізія
+                if (item.y > basket.y && item.x > basket.x && item.x < basket.x + basket.w) {
+                    if (item.isVirus) {
+                        alert('SYSTEM OVERLOAD! Твій рахунок: ' + score);
+                        toggleGame();
+                    } else {
+                        score++;
+                        updateScore();
+                        items.splice(i, 1);
+                    }
+                }
+
+                if (item.y > canvas.height) items.splice(i, 1);
+            });
+
+            requestAnimationFrame(update);
+        }
+
+        // Керування тачем
+        gameSection.addEventListener('touchmove', (e) => {
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            basket.x = touch.clientX - rect.left - basket.w / 2;
+            if (basket.x < 0) basket.x = 0;
+            if (basket.x > canvas.width - basket.w) basket.x = canvas.width - basket.w;
+            e.preventDefault();
+        }, { passive: false });
+
+        window.onresize = resizeCanvas;
+    </script>
 
 </body>
 </html>
