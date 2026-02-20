@@ -6,6 +6,7 @@
     <title>Послуги - Snoopy Service</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
     <style>
+        * { box-sizing: border-box; }
         body {
             background-color: #0a0a0a;
             background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('BG.JPG');
@@ -17,124 +18,82 @@
             margin: 0;
             padding: 20px;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
             min-height: 100vh;
-            position: relative;
         }
 
-        /* НАПИС: ОПУЩЕНИЙ І МАТОВИЙ */
         .logo-top-left {
-            position: absolute;
-            top: 50px; /* Опустили з 20px до 50px */
-            left: 30px;
+            align-self: flex-start;
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
+            font-size: clamp(0.7rem, 4vw, 1.1rem);
             color: #00d4ff;
-            letter-spacing: 2px;
+            opacity: 0.5;
+            margin-bottom: 20px;
             text-transform: uppercase;
-            opacity: 0.5; /* Матовий ефект */
         }
 
         .container {
             width: 100%;
-            max-width: 500px;
+            max-width: 550px;
             background: rgba(20, 20, 20, 0.95);
-            border: 2px solid #333;
-            border-radius: 25px;
-            padding: 35px;
-            align-self: center;
-            margin-top: 80px; /* Збільшили відступ, щоб логотип не заважав на мобільних */
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid #333;
+            border-radius: 20px;
+            padding: clamp(15px, 5vw, 35px); /* Паддінги зменшуються на малих екранах */
         }
 
-        h2 {
-            color: #ff9100;
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 30px;
-        }
+        h2 { color: #ff9100; text-align: center; text-transform: uppercase; font-size: 1.5rem; }
 
         .category-title {
             color: #00d4ff;
-            font-size: 1rem;
-            margin-top: 25px;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            opacity: 0.8;
+            font-size: 0.9rem;
+            margin-top: 20px;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+            padding-bottom: 5px;
         }
 
         .service-item {
             display: flex;
             justify-content: space-between;
             padding: 12px 0;
+            font-size: clamp(0.85rem, 4vw, 1rem);
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
-        .price {
-            color: #00ff00;
-            font-weight: bold;
-        }
+        .price { color: #00ff00; font-weight: bold; white-space: nowrap; margin-left: 10px; }
 
-        /* Матова кнопка в стилі головної */
         .back-btn {
             display: block;
+            margin-top: 30px;
             padding: 15px;
-            margin-top: 40px;
-            background: transparent;
             color: #ff9100;
             border: 2px solid #ff9100;
             text-decoration: none;
-            font-weight: bold;
             border-radius: 50px;
             text-align: center;
+            font-weight: bold;
             transition: 0.3s;
-            text-transform: uppercase;
         }
 
-        .back-btn:hover {
-            background: #ff9100;
-            color: #000;
-            transform: scale(1.02);
-        }
+        .back-btn:hover { background: #ff9100; color: #000; }
 
         @media (max-width: 480px) {
-            .logo-top-left {
-                top: 30px; /* На телефонах трохи вище, щоб не перекривало */
-                left: 20px;
-                font-size: 0.8rem;
-            }
-            .container {
-                margin-top: 60px;
-            }
+            body { padding: 10px; }
+            .container { padding: 20px; }
         }
     </style>
 </head>
 <body>
-
     <div class="logo-top-left">Service by Snoopy</div>
-
     <div class="container">
         <h2>Прайс послуг</h2>
-
         <div class="category-title">⚙️ ЗАЛІЗО</div>
-        <div class="service-item"><span>Чистка + термопаста</span> <span class="price">від 500 грн</span></div>
-        <div class="service-item"><span>Збірка ПК</span> <span class="price">від 1000 грн</span></div>
-        <div class="service-item"><span>Заміна комплектуючих</span> <span class="price">250 грн</span></div>
-
+        <div class="service-item"><span>Чистка + паста</span> <span class="price">від 500 ₴</span></div>
+        <div class="service-item"><span>Збірка ПК</span> <span class="price">від 1000 ₴</span></div>
         <div class="category-title">💻 СОФТ</div>
-        <div class="service-item"><span>Windows + драйвери</span> <span class="price">450 грн</span></div>
-        <div class="service-item"><span>Оптимізація системи</span> <span class="price">300 грн</span></div>
-
-        <div class="category-title">🚗 ВИЇЗД</div>
-        <div class="service-item"><span>Виклик майстра</span> <span class="price">від 200 грн</span></div>
-
+        <div class="service-item"><span>Windows + DRV</span> <span class="price">450 ₴</span></div>
+        <div class="service-item"><span>Оптимізація</span> <span class="price">300 ₴</span></div>
         <a href="index.html" class="back-btn">← НА ГОЛОВНУ</a>
-        
-        <div class="footer-note" style="text-align: center; margin-top: 20px; color: #666; font-size: 0.8rem;">
-            🛡️ Гарантія на всі види робіт
-        </div>
     </div>
-
 </body>
 </html>
