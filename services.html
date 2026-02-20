@@ -8,8 +8,7 @@
     <style>
         * { box-sizing: border-box; }
         body {
-            /* Запасний чорний колір + картинка */
-            background-color: #0a0a0a; 
+            background-color: #0a0a0a; /* Тепер фон не буде білим */
             background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('BG.JPG');
             background-repeat: no-repeat;
             background-position: center center;
@@ -28,23 +27,24 @@
         .main-layout { display: flex; flex-wrap: wrap; gap: 20px; width: 100%; max-width: 1000px; }
         .card { background: rgba(15, 15, 15, 0.95); border: 1px solid #333; border-radius: 25px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.7); }
         .price-container { flex: 2; min-width: 300px; }
-        .photo-aside { flex: 1.2; min-width: 280px; text-align: center; }
+        .photo-aside { flex: 1.5; min-width: 280px; text-align: center; }
 
         h2 { font-family: 'Orbitron', sans-serif; color: #ff9100; margin-top: 0; text-transform: uppercase; font-size: 1.1rem; }
         .service-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .price { color: #00ff00; font-family: 'Orbitron', sans-serif; font-weight: bold; }
 
+        /* Галерея на 2 фото */
+        .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
         .work-img { 
             width: 100%; 
-            max-height: 400px; 
+            height: 160px; 
             object-fit: cover; 
-            border-radius: 15px; 
+            border-radius: 12px; 
             border: 1px solid #444; 
             cursor: pointer; 
             transition: 0.3s; 
-            margin-top: 10px;
         }
-        .work-img:hover { border-color: #ff9100; transform: scale(1.02); }
+        .work-img:hover { border-color: #ff9100; transform: scale(1.05); }
         
         #imgModal { display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; backdrop-filter: blur(8px); cursor: zoom-out; }
         #imgModal img { max-width: 90%; max-height: 90%; border: 2px solid #ff9100; border-radius: 10px; }
@@ -52,7 +52,6 @@
         .btn-group { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 400px; margin-top: 25px; }
         .btn { padding: 15px; border-radius: 40px; text-align: center; text-decoration: none; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: bold; cursor: pointer; border: 2px solid; transition: 0.3s; text-transform: uppercase; }
         .back-btn { color: #ff9100; border-color: #ff9100; }
-        .back-btn:hover { background: #ff9100; color: #000; }
         .game-btn { color: #ff0055; border-color: #ff0055; }
         .game-btn:hover { background: #ff0055; color: #fff; }
 
@@ -79,10 +78,13 @@
             <div class="service-item"><span>Виїзд</span> <span class="price">від 500 ₴</span></div>
         </div>
 
-        <div class="photo-aside">
-            <h2>Work</h2>
-            <img src="phot01.jpg" class="work-img" onclick="showImg(this.src)">
-            <p style="font-size: 0.75rem; color: #777; margin-top: 10px;">Натисніть для збільшення</p>
+        <div class="card photo-aside">
+            <h2>Work Gallery</h2>
+            <div class="gallery">
+                <img src="phot01.jpg" class="work-img" onclick="showImg(this.src)">
+                <img src="phot02.jpg" class="work-img" onclick="showImg(this.src)">
+            </div>
+            <p style="font-size: 0.7rem; color: #777; margin-top: 10px;">Натисніть для збільшення</p>
         </div>
     </div>
 
@@ -138,7 +140,7 @@
                 ctx.fillText(it.bad ? "👾" : "⚙️", it.x, it.y);
 
                 if(it.y > 365 && it.y < 385 && it.x > basket.x - 10 && it.x < basket.x + basket.w) {
-                    if(it.bad) { alert("BOOM! Score: " + score); toggleGame(); return; }
+                    if(it.bad) { alert("GAME OVER! Score: " + score); toggleGame(); return; }
                     else { score++; scoreEl.innerText = "SCORE: " + score; items.splice(i, 1); continue; }
                 }
                 if(it.y > 410) items.splice(i, 1);
