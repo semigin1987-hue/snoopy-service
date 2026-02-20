@@ -9,12 +9,17 @@
         * { box-sizing: border-box; }
         
         body {
-            background-color: #050505;
-            background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('BG.JPG');
+            background-color: #000;
+            /* Ефект глибини дзеркала через градієнти та змішування */
+            background-image: 
+                linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 40%),
+                radial-gradient(circle at 50% -20%, rgba(160, 32, 240, 0.15), transparent 80%),
+                url('BG.JPG');
             background-repeat: no-repeat; 
             background-position: center; 
             background-attachment: fixed; 
             background-size: cover;
+            background-blend-mode: overlay;
             color: #e0e0e0; 
             font-family: 'Segoe UI', sans-serif;
             margin: 0; 
@@ -23,10 +28,24 @@
             flex-direction: column; 
             align-items: center; 
             min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Глянцевий відблиск поверх екрану */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, rgba(255,255,255,0.03) 0%, transparent 50%, rgba(255,255,255,0.01) 100%);
+            pointer-events: none;
+            z-index: 10;
         }
 
         /* АНІМАЦІЯ ЛОГОТИПА */
-        .header-left { align-self: flex-start; margin-bottom: 25px; }
+        .header-left { align-self: flex-start; margin-bottom: 25px; position: relative; z-index: 20; }
         .neon-logo { 
             font-family: 'Orbitron', sans-serif; 
             color: #00d4ff;
@@ -49,16 +68,25 @@
             font-size: 0.85rem; 
             margin-top: 10px;
             padding: 6px 15px;
-            background: rgba(160, 32, 240, 0.05);
-            border: 1px solid rgba(160, 32, 240, 0.3);
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(160, 32, 240, 0.4);
             border-radius: 12px;
             display: inline-block;
             text-shadow: 0 0 8px rgba(160, 32, 240, 0.8);
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
         }
 
-        /* КАРТКИ */
-        .main-layout { display: flex; flex-wrap: wrap; gap: 20px; width: 100%; max-width: 1000px; }
-        .card { background: rgba(15, 15, 15, 0.95); border: 1px solid #333; border-radius: 25px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.7); }
+        /* ДЗЕРКАЛЬНІ КАРТКИ */
+        .main-layout { display: flex; flex-wrap: wrap; gap: 20px; width: 100%; max-width: 1000px; position: relative; z-index: 20; }
+        .card { 
+            background: rgba(0, 0, 0, 0.65); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 25px; 
+            padding: 25px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset 0 0 20px rgba(255,255,255,0.02); 
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+        }
         .price-container { flex: 2; min-width: 300px; }
         .photo-aside { flex: 1.5; min-width: 280px; text-align: center; }
 
@@ -68,16 +96,21 @@
 
         /* ГАЛЕРЕЯ */
         .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .work-img { width: 100%; height: 140px; object-fit: cover; border-radius: 12px; border: 1px solid #444; cursor: pointer; transition: 0.3s; }
+        .work-img { 
+            width: 100%; height: 140px; object-fit: cover; border-radius: 12px; 
+            border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: 0.3s; 
+        }
+        .work-img:hover { border-color: #ff9100; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
         
-        #imgModal { display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; backdrop-filter: blur(8px); }
-        #imgModal img { max-width: 90%; max-height: 90%; border: 2px solid #ff9100; border-radius: 10px; }
+        #imgModal { display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        #imgModal img { max-width: 90%; max-height: 90%; border: 1px solid #ff9100; border-radius: 10px; }
 
         /* КНОПКИ */
-        .btn-group { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 400px; margin-top: 25px; }
+        .btn-group { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 400px; margin-top: 25px; position: relative; z-index: 20; }
         .btn { padding: 15px; border-radius: 40px; text-align: center; text-decoration: none; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: bold; cursor: pointer; border: 2px solid; transition: 0.3s; text-transform: uppercase; }
-        .back-btn { color: #ff9100; border-color: #ff9100; }
-        .game-btn { color: #ff0055; border-color: #ff0055; }
+        .back-btn { color: #ff9100; border-color: #ff9100; background: rgba(255, 145, 0, 0.05); }
+        .game-btn { color: #ff0055; border-color: #ff0055; background: rgba(255, 0, 85, 0.05); }
+        .btn:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
 
         /* ГРА */
         #game-section { 
@@ -86,11 +119,12 @@
             width: 320px; 
             height: 400px; 
             background: #000; 
-            border: 2px solid #ff0055; 
+            border: 1px solid #ff0055; 
             border-radius: 20px; 
             position: relative; 
             overflow: hidden; 
             touch-action: none;
+            z-index: 20;
         }
         #gameCanvas { width: 100%; height: 100%; }
         #score { position: absolute; top: 10px; left: 15px; color: #00ff00; font-family: 'Orbitron', sans-serif; z-index: 10; }
@@ -121,4 +155,80 @@
                 <img src="phot01.jpg" class="work-img" onclick="showImg(this.src)">
                 <img src="photo777.png" class="work-img" onclick="showImg(this.src)" onerror="this.src='phot01.jpg'">
                 <img src="photo888.jpg" class="work-img" onclick="showImg(this.src)" onerror="this.src='phot01.jpg'">
-                <img src="gemini1.png" class="work-
+                <img src="gemini1.png" class="work-img" onclick="showImg(this.src)" onerror="this.src='phot01.jpg'">
+            </div>
+        </div>
+    </div>
+
+    <div class="btn-group">
+        <div class="btn game-btn" onclick="toggleGame()">🎮 РЕЖИМ ГРИ</div>
+        <a href="index.html" class="btn back-btn">← НА ГОЛОВНУ</a>
+    </div>
+
+    <div id="game-section">
+        <div id="score">SCORE: 0</div>
+        <canvas id="gameCanvas"></canvas>
+    </div>
+
+    <script>
+        function showImg(src) { 
+            document.getElementById('fullImg').src = src; 
+            document.getElementById('imgModal').style.display = 'flex'; 
+        }
+        
+        function updateClock() {
+            let now = new Date();
+            let date = now.toLocaleDateString('uk-UA');
+            let time = now.toLocaleTimeString('uk-UA');
+            document.getElementById('live-clock').innerHTML = `${date} | <span style="color: #fff; text-shadow: 0 0 5px #fff;">${time}</span>`;
+        }
+        setInterval(updateClock, 1000); 
+        updateClock();
+
+        const cvs = document.getElementById('gameCanvas');
+        const ctx = cvs.getContext('2d');
+        const scoreEl = document.getElementById('score');
+        let active = false, score = 0, items = [], basket = { x: 125, w: 70 };
+
+        function toggleGame() {
+            active = !active;
+            document.getElementById('game-section').style.display = active ? 'block' : 'none';
+            if(active) { 
+                cvs.width = 320; cvs.height = 400; score = 0; scoreEl.innerText = "SCORE: 0"; items = []; 
+                requestAnimationFrame(gameLoop); 
+            }
+        }
+
+        function gameLoop() {
+            if(!active) return;
+            ctx.clearRect(0, 0, 320, 400);
+            if(Math.random() < 0.035) items.push({ x: Math.random()*290, y: -20, bad: Math.random() < 0.2 });
+            ctx.fillStyle = "#ff9100";
+            ctx.fillRect(basket.x, 375, basket.w, 10);
+            for(let i = items.length - 1; i >= 0; i--) {
+                let it = items[i];
+                it.y += (3.5 + (score * 0.05));
+                ctx.font = "24px Arial";
+                ctx.fillText(it.bad ? "👾" : "⚙️", it.x, it.y);
+                if(it.y > 365 && it.y < 385 && it.x > basket.x - 10 && it.x < basket.x + basket.w) {
+                    if(it.bad) { alert("ГРУ ЗАКІНЧЕНО! Рахунок: " + score); toggleGame(); return; }
+                    else { score++; scoreEl.innerText = "SCORE: " + score; items.splice(i, 1); continue; }
+                }
+                if(it.y > 410) items.splice(i, 1);
+            }
+            requestAnimationFrame(gameLoop);
+        }
+
+        function move(clientX) {
+            let rect = cvs.getBoundingClientRect();
+            let x = clientX - rect.left - basket.w/2;
+            basket.x = Math.max(0, Math.min(320 - basket.w, x));
+        }
+
+        window.addEventListener('mousemove', e => { if(active) move(e.clientX); });
+        cvs.addEventListener('touchmove', e => {
+            if(active) { move(e.touches[0].clientX); e.preventDefault(); }
+        }, {passive: false});
+    </script>
+</body>
+</html>
