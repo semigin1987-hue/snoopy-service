@@ -29,7 +29,7 @@
             max-width: 600px;
             background: rgba(0, 0, 0, 0.85);
             border-radius: 30px;
-            border: 1px solid rgba(160, 32, 240, 0.2);
+            border: 1px solid rgba(160, 32, 240, 0.3);
             backdrop-filter: blur(20px);
             padding: 30px;
             box-shadow: 0 0 50px rgba(0, 0, 0, 1);
@@ -45,7 +45,7 @@
             text-align: center;
             text-transform: uppercase;
             letter-spacing: 5px;
-            color: #a020f0; /* Бузковий колір */
+            color: #a020f0; /* Темно-сиреневый */
             margin-bottom: 30px;
             text-shadow: 0 0 15px rgba(160, 32, 240, 0.6);
         }
@@ -70,22 +70,21 @@
             letter-spacing: 1px;
         }
 
-        /* ЯСКРАВО-ЗЕЛЕНІ ЦІНИ */
         .service-price {
             font-weight: 700;
-            color: #00ff88;
+            color: #00ff88; /* Яркий зеленый */
             text-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
             white-space: nowrap;
         }
 
-        /* БЛОК ГРИ */
+        /* БЛОК ИГРЫ */
         .game-box {
             background: rgba(160, 32, 240, 0.05);
             border: 1px solid rgba(160, 32, 240, 0.2);
             border-radius: 20px;
             padding: 20px;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         #game-canvas {
@@ -96,29 +95,28 @@
             max-width: 100%;
             display: block;
             margin: 15px auto;
+            touch-action: none; /* Чтобы удобно было на телефоне */
         }
 
-        /* КНОПКА НАЗАД */
         .back-btn {
             display: block;
-            width: 200px;
+            width: 220px;
             margin: 0 auto;
             text-align: center;
             text-decoration: none;
             color: #ffffff;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             padding: 15px;
             border: 2px solid #a020f0;
             border-radius: 50px;
             transition: 0.3s;
-            background: transparent;
         }
 
         .back-btn:hover {
             background: #a020f0;
-            box-shadow: 0 0 25px rgba(160, 32, 240, 0.5);
+            box-shadow: 0 0 30px rgba(160, 32, 240, 0.6);
             color: #000;
         }
     </style>
@@ -130,19 +128,19 @@
         
         <ul class="price-list">
             <li class="price-item"><span class="service-name">Діагностика</span><span class="service-price">БЕЗКОШТОВНО</span></li>
-            <li class="price-item"><span class="service-name">Профілактика (чистка + паста)</span><span class="service-price">450 грн</span></li>
-            <li class="price-item"><span class="service-name">Встановлення ОС Windows 10/11</span><span class="service-price">500 грн</span></li>
-            <li class="price-item"><span class="service-name">Заміна комплектуючих</span><span class="service-price">від 300 грн</span></li>
-            <li class="price-item"><span class="service-name">Складання ігрових ПК</span><span class="service-price">від 1200 грн</span></li>
+            <li class="price-item"><span class="service-name">Чистка + термопаста</span><span class="service-price">450 грн</span></li>
+            <li class="price-item"><span class="service-name">Встановлення Windows</span><span class="service-price">500 грн</span></li>
+            <li class="price-item"><span class="service-name">Заміна екрану / АКБ</span><span class="service-price">від 400 грн</span></li>
+            <li class="price-item"><span class="service-name">Складання ПК</span><span class="service-price">від 1000 грн</span></li>
         </ul>
 
         <div class="game-box">
-            <span style="color: #a020f0; font-size: 0.7rem; letter-spacing: 2px;">RELAX ZONE: CLICK THE DOT</span>
+            <div style="color: #a020f0; font-size: 0.7rem; letter-spacing: 2px; margin-bottom: 10px;">RELAX ZONE: CLICK THE DOT</div>
             <canvas id="game-canvas" width="280" height="150"></canvas>
-            <div style="font-size: 0.9rem;">Score: <span id="score" style="color: #00ff88;">0</span></div>
+            <div style="font-size: 1rem;">Score: <span id="score" style="color: #00ff88;">0</span></div>
         </div>
 
-        <a href="index.html" class="back-btn">Назад</a>
+        <a href="index.html" class="back-btn">На головну</a>
     </div>
 
     <script>
@@ -154,31 +152,42 @@
 
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Рисуем точку
             ctx.beginPath();
             ctx.arc(target.x, target.y, target.r, 0, Math.PI * 2);
             ctx.fillStyle = "#00ff88";
-            ctx.shadowBlur = 15;
+            ctx.shadowBlur = 20;
             ctx.shadowColor = "#00ff88";
             ctx.fill();
             ctx.closePath();
         }
 
-        canvas.addEventListener('mousedown', (e) => {
+        function handleInput(e) {
             const rect = canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+            // Поддержка и мышки, и тача на телефоне
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            
+            const x = clientX - rect.left;
+            const y = clientY - rect.top;
             
             const dist = Math.hypot(x - target.x, y - target.y);
-            if (dist < target.r) {
+            
+            if (dist < target.r + 5) { // +5 для легкого попадания
                 score++;
                 scoreEl.textContent = score;
                 target.x = Math.random() * (canvas.width - 40) + 20;
                 target.y = Math.random() * (canvas.height - 40) + 20;
                 draw();
             }
+        }
+
+        canvas.addEventListener('mousedown', handleInput);
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Чтобы страница не дергалась при игре
+            handleInput(e);
         });
 
-        // Малювання першої цілі
         draw();
     </script>
 </body>
