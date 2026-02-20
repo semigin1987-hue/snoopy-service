@@ -7,239 +7,251 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
-        
         body {
             background-color: #0a0a0a;
             background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('BG.JPG');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            color: #e0e0e0;
-            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #ffffff;
+            font-family: 'Orbitron', sans-serif;
             margin: 0;
-            padding: 20px 20px 80px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            padding: 20px;
         }
 
-        .logo-top-left {
-            align-self: flex-start;
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(0.7rem, 4vw, 1rem);
-            color: #00d4ff;
-            opacity: 0.5;
-            margin-bottom: 30px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .main-layout {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
+        .container {
             width: 100%;
-            max-width: 1000px;
-            align-items: flex-start;
-            margin-bottom: 40px;
-        }
-
-        .price-container, .photo-aside {
-            background: rgba(15, 15, 15, 0.95);
-            border: 1px solid #333;
-            border-radius: 25px;
+            max-width: 600px;
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 30px;
+            border: 1px solid rgba(160, 32, 240, 0.3);
+            backdrop-filter: blur(20px);
             padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        .price-container { flex: 2; min-width: 320px; }
-        .photo-aside { flex: 1; min-width: 250px; margin-top: 45px; }
-
-        h2 { 
-            font-family: 'Orbitron', sans-serif;
-            color: #ff9100; 
-            text-transform: uppercase; 
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-        }
-
-        .service-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .price { font-family: 'Orbitron', sans-serif; color: #00ff00; font-weight: bold; }
-
-        /* КНОПКИ КЕРУВАННЯ */
-        .btn-row { display: flex; gap: 15px; width: 100%; max-width: 1000px; margin-top: 20px; }
-
-        .back-btn, .game-toggle-btn {
-            flex: 1;
-            padding: 15px;
-            text-decoration: none;
-            border-radius: 50px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.8rem;
-            font-weight: bold;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 1);
             text-align: center;
-            transition: 0.3s;
-            cursor: pointer;
-            text-transform: uppercase;
         }
 
-        .back-btn { color: #fff; border: 2px solid #555; background: transparent; }
-        .back-btn:hover { background: #fff; color: #000; }
+        h2 {
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: #a020f0;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(160, 32, 240, 0.6);
+        }
 
-        .game-toggle-btn { color: #ff0055; border: 2px solid #ff0055; background: transparent; box-shadow: 0 0 10px rgba(255, 0, 85, 0.2); }
-        .game-toggle-btn:hover { background: #ff0055; color: #fff; box-shadow: 0 0 20px rgba(255, 0, 85, 0.5); }
+        .price-list {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 25px;
+            text-align: left;
+        }
 
-        /* СЕКЦІЯ ГРИ */
-        #game-section {
-            display: none;
-            width: 100%;
-            max-width: 400px;
-            height: 450px;
-            background: #000;
-            border: 2px solid #ff0055;
-            border-radius: 25px;
-            margin-top: 30px;
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .service-price {
+            color: #00ff88;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+        }
+
+        /* ГРА */
+        #game-container {
             position: relative;
+            width: 100%;
+            height: 300px;
+            background: #000;
+            border: 2px solid #a020f0;
+            border-radius: 15px;
+            margin: 20px 0;
             overflow: hidden;
             touch-action: none;
+            cursor: pointer;
         }
 
-        #gameCanvas { width: 100%; height: 100%; }
-        #score-board { position: absolute; top: 15px; left: 15px; font-family: 'Orbitron', sans-serif; color: #00ff00; font-size: 0.9rem; }
-
-        @media (max-width: 768px) {
-            .main-layout { flex-direction: column; }
-            .photo-aside { margin-top: 0; width: 100%; }
+        #snoopy-player {
+            position: absolute;
+            left: 40px;
+            top: 120px;
+            font-size: 35px;
+            z-index: 10;
+            line-height: 1;
         }
+
+        .obstacle {
+            position: absolute;
+            width: 50px;
+            background: linear-gradient(to bottom, #a020f0, #6a0dad);
+            box-shadow: 0 0 15px rgba(160, 32, 240, 0.5);
+            right: -60px;
+        }
+
+        #score-display {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            color: #00ff88;
+            font-size: 1.2rem;
+            z-index: 20;
+        }
+
+        .back-btn {
+            display: inline-block;
+            text-decoration: none;
+            color: #fff;
+            border: 2px solid #a020f0;
+            padding: 12px 30px;
+            border-radius: 50px;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover { background: #a020f0; box-shadow: 0 0 20px #a020f0; color: #000; }
     </style>
 </head>
 <body>
 
-    <div class="logo-top-left">Service by Snoopy</div>
-
-    <div class="main-layout">
-        <div class="price-container">
-            <h2>Прайс послуг</h2>
-            <div class="service-item"><span>Чистка ПК/span> <span class="price">від 600 ₴</span></div>
-            <div class="service-item"><span>Збірка ПК</span> <span class="price">1200 ₴</span></div>
-            <div class="service-item"><span>Windows + Soft</span> <span class="price">від 650 ₴</span></div>
+    <div class="container">
+        <h2>Прайс послуг</h2>
+        <div class="price-list">
+            <div class="price-item"><span>Чистка ПК</span><span class="service-price">від 600 ₴</span></div>
+            <div class="price-item"><span>Збірка ПК</span><span class="service-price">1200 ₴</span></div>
+            <div class="price-item"><span>Windows + Soft</span><span class="service-price">від 650 ₴</span></div>
         </div>
 
-        <div class="photo-aside">
-            <h2>Work</h2>
-            <div style="display: flex; gap: 10px;">
-                <img src="WORK1.JPG" alt="1" style="width: 100%; border-radius: 10px;">
-            </div>
+        <div id="game-container">
+            <div id="score-display">Score: 0</div>
+            <div id="snoopy-player">🐶</div>
         </div>
-    </div>
+        <p style="font-size: 0.7rem; color: #a020f0;">Клікай по грі, щоб летіти! Музика увімкнеться після кліку.</p>
 
-    <div class="btn-row">
         <a href="index.html" class="back-btn">← НА ГОЛОВНУ</a>
-        <div class="game-toggle-btn" onclick="toggleGame()">🎮 GAME</div>
     </div>
 
-    <div id="game-section">
-        <div id="score-board">SCORE: 0</div>
-        <canvas id="gameCanvas"></canvas>
-    </div>
+    <audio id="bg-music" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const gameSection = document.getElementById('game-section');
-        let gameActive = false;
+        const player = document.getElementById('snoopy-player');
+        const container = document.getElementById('game-container');
+        const scoreEl = document.getElementById('score-display');
+        const music = document.getElementById('bg-music');
+        
+        let playerY = 120;
+        let velocity = 0;
+        let gravity = 0.25;
         let score = 0;
-        let basket = { x: 170, y: 400, w: 70, h: 10 };
-        let items = [];
+        let isGameOver = false;
+        let gameStarted = false;
 
-        function toggleGame() {
-            gameActive = !gameActive;
-            gameSection.style.display = gameActive ? 'block' : 'none';
-            if (gameActive) {
-                resizeCanvas();
-                resetGame();
-                requestAnimationFrame(update);
+        function jump() {
+            if (!gameStarted) {
+                gameStarted = true;
+                music.play().catch(() => {}); // Вмикаємо музику
+                spawnLoop();
             }
+            if (isGameOver) {
+                resetGame();
+                return;
+            }
+            velocity = -5;
         }
 
-        function resizeCanvas() {
-            canvas.width = gameSection.offsetWidth;
-            canvas.height = gameSection.offsetHeight;
-            basket.y = canvas.height - 30;
+        container.addEventListener('mousedown', (e) => { e.preventDefault(); jump(); });
+        container.addEventListener('touchstart', (e) => { e.preventDefault(); jump(); });
+
+        function createObstacle() {
+            if (isGameOver) return;
+            
+            const gap = 110;
+            const minHeight = 20;
+            const maxHeight = container.offsetHeight - gap - minHeight;
+            const topHeight = Math.random() * (maxHeight - minHeight) + minHeight;
+
+            const topObs = document.createElement('div');
+            topObs.className = 'obstacle';
+            topObs.style.height = topHeight + 'px';
+            topObs.style.top = '0';
+            
+            const botObs = document.createElement('div');
+            botObs.className = 'obstacle';
+            botObs.style.height = (container.offsetHeight - topHeight - gap) + 'px';
+            botObs.style.bottom = '0';
+
+            container.appendChild(topObs);
+            container.appendChild(botObs);
+
+            let obsX = container.offsetWidth;
+            
+            const moveObs = setInterval(() => {
+                if (isGameOver) {
+                    clearInterval(moveObs);
+                    return;
+                }
+                obsX -= 3;
+                topObs.style.left = obsX + 'px';
+                botObs.style.left = obsX + 'px';
+
+                if (obsX < -60) {
+                    clearInterval(moveObs);
+                    topObs.remove();
+                    botObs.remove();
+                    score++;
+                    scoreEl.innerText = "Score: " + score;
+                }
+
+                // Колізії
+                const p = player.getBoundingClientRect();
+                const t = topObs.getBoundingClientRect();
+                const b = botObs.getBoundingClientRect();
+
+                if (p.right > t.left && p.left < t.right && (p.top < t.bottom || p.bottom > b.top)) {
+                    endGame();
+                }
+            }, 20);
         }
 
-        function resetGame() {
-            score = 0;
-            items = [];
-            updateScore();
-        }
-
-        function updateScore() {
-            document.getElementById('score-board').innerText = 'SCORE: ' + score;
-        }
-
-        function spawnItem() {
-            if (Math.random() < 0.03) {
-                const isVirus = Math.random() < 0.3;
-                items.push({
-                    x: Math.random() * (canvas.width - 20),
-                    y: -20,
-                    size: 25,
-                    speed: 3 + (score / 10),
-                    isVirus: isVirus
-                });
+        function spawnLoop() {
+            if (!isGameOver) {
+                createObstacle();
+                setTimeout(spawnLoop, 1800);
             }
         }
 
         function update() {
-            if (!gameActive) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            spawnItem();
+            if (gameStarted && !isGameOver) {
+                velocity += gravity;
+                playerY += velocity;
+                player.style.top = playerY + 'px';
+                player.style.transform = `rotate(${velocity * 3}deg)`;
 
-            // Кошик майстра
-            ctx.fillStyle = '#ff9100';
-            ctx.shadowBlur = 10;
-            ctx.shadowColor = '#ff9100';
-            ctx.fillRect(basket.x, basket.y, basket.w, basket.h);
-            ctx.shadowBlur = 0;
-
-            items.forEach((item, i) => {
-                item.y += item.speed;
-                ctx.font = '20px Arial';
-                ctx.fillText(item.isVirus ? '👾' : '⚙️', item.x, item.y);
-
-                // Колізія
-                if (item.y > basket.y && item.x > basket.x && item.x < basket.x + basket.w) {
-                    if (item.isVirus) {
-                        alert('SYSTEM OVERLOAD! Твій рахунок: ' + score);
-                        toggleGame();
-                    } else {
-                        score++;
-                        updateScore();
-                        items.splice(i, 1);
-                    }
+                if (playerY < 0 || playerY > container.offsetHeight - 35) {
+                    endGame();
                 }
-
-                if (item.y > canvas.height) items.splice(i, 1);
-            });
-
+            }
             requestAnimationFrame(update);
         }
 
-        // Керування тачем
-        gameSection.addEventListener('touchmove', (e) => {
-            const touch = e.touches[0];
-            const rect = canvas.getBoundingClientRect();
-            basket.x = touch.clientX - rect.left - basket.w / 2;
-            if (basket.x < 0) basket.x = 0;
-            if (basket.x > canvas.width - basket.w) basket.x = canvas.width - basket.w;
-            e.preventDefault();
-        }, { passive: false });
+        function endGame() {
+            isGameOver = true;
+            alert("Game Over! Твій рахунок: " + score);
+            resetGame();
+        }
 
-        window.onresize = resizeCanvas;
+        function resetGame() {
+            location.reload();
+        }
+
+        update();
     </script>
-
 </body>
 </html>
-
