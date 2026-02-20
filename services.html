@@ -23,7 +23,6 @@
             min-height: 100vh;
         }
 
-        /* БЛОК ЛОГО ТА ГОДИННИКА */
         .header-left {
             align-self: flex-start;
             margin-bottom: 30px;
@@ -34,19 +33,13 @@
             font-size: clamp(0.9rem, 4vw, 1.2rem);
             color: #00d4ff;
             text-transform: uppercase;
-            margin-bottom: 5px; /* Малий відступ до годинника */
+            margin-bottom: 5px;
             animation: glow 2s infinite alternate;
         }
 
         @keyframes glow {
-            from {
-                text-shadow: 0 0 5px #00d4ff, 0 0 10px #00d4ff;
-                opacity: 0.6;
-            }
-            to {
-                text-shadow: 0 0 15px #00d4ff, 0 0 25px #00d4ff, 0 0 35px #00d4ff;
-                opacity: 1;
-            }
+            from { text-shadow: 0 0 5px #00d4ff, 0 0 10px #00d4ff; opacity: 0.6; }
+            to { text-shadow: 0 0 15px #00d4ff, 0 0 25px #00d4ff, 0 0 35px #00d4ff; opacity: 1; }
         }
 
         .clock {
@@ -106,7 +99,7 @@
 
     <div class="header-left">
         <div class="neon-logo">Service by Snoopy</div>
-        <div id="live-clock" class="clock">20.02.2026 | 13:15:00</div>
+        <div id="live-clock" class="clock">Завантаження...</div>
     </div>
 
     <div class="main-layout">
@@ -119,7 +112,7 @@
         </div>
         <div class="photo-aside">
             <h2>Work</h2>
-            <img src="WORK1.JPG" alt="Work" style="width: 100%; border-radius: 15px; border: 1px solid #333;">
+            <img src="phot01.jpg" alt="Work" style="width: 100%; border-radius: 15px; border: 1px solid #333;">
         </div>
     </div>
 
@@ -140,7 +133,6 @@
     <button class="mute-btn" onclick="toggleMute()">🔊</button>
 
     <script>
-        // ГОДИННИК
         function updateClock() {
             const now = new Date();
             const dateStr = now.toLocaleDateString('uk-UA');
@@ -155,78 +147,3 @@
         const gameSection = document.getElementById('game-section');
         const music = document.getElementById('bg-music');
         let gameActive = false, score = 0, items = [];
-        let basket = { x: 0, y: 0, w: 70, h: 10 };
-
-        music.volume = 0.3;
-
-        function toggleGame() {
-            gameActive = !gameActive;
-            gameSection.style.display = gameActive ? 'block' : 'none';
-            
-            if (gameActive) {
-                if (music.paused) music.play().catch(e => console.log("Music click required"));
-                resize();
-                reset();
-                setTimeout(() => gameSection.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
-                requestAnimationFrame(loop);
-            }
-        }
-
-        function toggleMute() {
-            music.muted = !music.muted;
-            document.querySelector('.mute-btn').innerText = music.muted ? '🔇' : '🔊';
-        }
-
-        function resize() {
-            canvas.width = gameSection.offsetWidth;
-            canvas.height = gameSection.offsetHeight;
-            basket.y = canvas.height - 30;
-            basket.x = canvas.width / 2 - 35;
-        }
-
-        function reset() { score = 0; items = []; updateScore(); }
-        function updateScore() { document.getElementById('score-board').innerText = 'SCORE: ' + score; }
-
-        function loop() {
-            if (!gameActive) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            if (Math.random() < 0.03) items.push({ x: Math.random()*(canvas.width-20), y: -20, v: Math.random()<0.3 });
-            
-            ctx.fillStyle = '#ff9100';
-            ctx.fillRect(basket.x, basket.y, basket.w, basket.h);
-
-            items.forEach((item, i) => {
-                item.y += 4;
-                ctx.font = '24px Arial';
-                ctx.fillText(item.v ? '👾' : '⚙️', item.x, item.y);
-                
-                if (item.y > basket.y - 15 && item.y < basket.y + 10 && item.x > basket.x - 10 && item.x < basket.x + basket.w) {
-                    if (item.v) { 
-                        alert('GAME OVER! Score: ' + score); 
-                        toggleGame(); 
-                    } else { 
-                        score++; 
-                        updateScore(); 
-                        items.splice(i, 1); 
-                    }
-                }
-                if (item.y > canvas.height) items.splice(i, 1);
-            });
-            requestAnimationFrame(loop);
-        }
-
-        function move(e) {
-            const rect = canvas.getBoundingClientRect();
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const x = clientX - rect.left;
-            basket.x = Math.max(0, Math.min(canvas.width - basket.w, x - basket.w/2));
-        }
-
-        gameSection.addEventListener('mousemove', move);
-        gameSection.addEventListener('touchmove', (e) => { move(e); e.preventDefault(); }, {passive: false});
-        window.onresize = resize;
-    </script>
-</body>
-</html>
-
