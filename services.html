@@ -3,111 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snoopy Service - Галерея та Послуги</title>
+    <title>Snoopy Service - Послуги</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; scroll-behavior: smooth; }
+        * { box-sizing: border-box; }
         body {
-            background-color: #0a0a0a;
-            background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('BG.JPG');
+            background: #0a0a0a linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('BG.JPG') no-repeat center center fixed;
             background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
             color: #e0e0e0;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            font-family: sans-serif;
+            margin: 0; padding: 20px;
+            display: flex; flex-direction: column; align-items: center;
         }
+        .header-left { align-self: flex-start; margin-bottom: 20px; }
+        .neon-logo { font-family: 'Orbitron', sans-serif; color: #00d4ff; text-transform: uppercase; text-shadow: 0 0 10px #00d4ff; }
+        .clock { color: #a020f0; font-family: 'Orbitron', sans-serif; font-size: 0.9rem; }
 
-        .header-left { align-self: flex-start; margin-bottom: 30px; }
-        .neon-logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(0.9rem, 4vw, 1.2rem);
-            color: #00d4ff;
-            text-transform: uppercase;
-            animation: glow 2s infinite alternate;
-        }
-        @keyframes glow {
-            from { text-shadow: 0 0 5px #00d4ff; opacity: 0.6; }
-            to { text-shadow: 0 0 20px #00d4ff; opacity: 1; }
-        }
-        .clock { font-family: 'Orbitron', sans-serif; color: #a020f0; font-size: 0.85rem; margin-top: 5px; }
-
-        .main-layout { display: flex; flex-wrap: wrap; gap: 20px; width: 100%; max-width: 1000px; align-items: stretch; }
-        .price-container, .photo-aside {
-            background: rgba(15, 15, 15, 0.95);
-            border: 1px solid #333;
-            border-radius: 25px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
+        .main-layout { display: flex; flex-wrap: wrap; gap: 20px; width: 100%; max-width: 1000px; }
+        .price-container, .photo-aside { background: rgba(20, 20, 20, 0.9); border: 1px solid #333; border-radius: 20px; padding: 20px; }
         .price-container { flex: 2; min-width: 300px; }
-        .photo-aside { flex: 1.5; min-width: 300px; text-align: center; }
+        .photo-aside { flex: 1.5; min-width: 280px; text-align: center; }
 
-        .gallery-grid { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 12px; 
-            margin-top: 15px;
-        }
+        h2 { font-family: 'Orbitron', sans-serif; color: #ff9100; margin-top: 0; }
+        .service-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #222; }
+        .price { color: #00ff00; font-family: 'Orbitron', sans-serif; }
 
-        h2 { font-family: 'Orbitron', sans-serif; color: #ff9100; text-transform: uppercase; margin-top: 0; }
-        .service-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .price { color: #00ff00; font-weight: bold; font-family: 'Orbitron', sans-serif; }
-
-        .work-img { 
-            width: 100%; 
-            height: 180px; 
-            object-fit: cover; 
-            border-radius: 12px; 
-            border: 1px solid #444; 
-            cursor: pointer; 
-            transition: 0.3s; 
-        }
-        .work-img:hover { transform: scale(1.05); border-color: #ff9100; z-index: 2; }
-
-        .modal {
-            display: none; position: fixed; z-index: 9999; top: 0; left: 0;
-            width: 100%; height: 100%; background: rgba(0,0,0,0.95);
-            align-items: center; justify-content: center; backdrop-filter: blur(10px);
-            cursor: zoom-out;
-        }
-        .modal img { max-width: 95%; max-height: 95%; border: 2px solid #ff9100; border-radius: 10px; }
-
-        .btn-row { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 400px; margin-top: 30px; }
-        .back-btn, .game-toggle-btn {
-            padding: 15px; text-decoration: none; border-radius: 50px; font-family: 'Orbitron', sans-serif;
-            font-size: 0.8rem; text-align: center; cursor: pointer; border: 2px solid; transition: 0.3s; font-weight: bold;
-        }
-        .back-btn { color: #ff9100; border-color: #ff9100; }
-        .game-toggle-btn { color: #ff0055; border-color: #ff0055; }
-        .game-toggle-btn:hover { background: #ff0055; color: #fff; }
-
-        #game-section { display: none; width: 100%; max-width: 400px; height: 400px; background: #000; border: 2px solid #ff0055; border-radius: 25px; margin-top: 20px; position: relative; overflow: hidden; touch-action: none; }
-        #gameCanvas { width: 100%; height: 100%; }
-        #score-board { position: absolute; top: 10px; left: 10px; font-family: 'Orbitron', sans-serif; color: #00ff00; z-index: 5; }
+        .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .work-img { width: 100%; height: 150px; object-fit: cover; border-radius: 10px; cursor: pointer; border: 1px solid #444; }
         
-        .mute-btn { position: fixed; bottom: 20px; right: 20px; background: rgba(255,145,0,0.1); border: 1px solid #ff9100; color: #ff9100; border-radius: 50%; width: 45px; height: 45px; cursor: pointer; z-index: 1000; }
+        /* Модалка */
+        #imgModal { display: none; position: fixed; z-index: 1000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; }
+        #imgModal img { max-width: 90%; max-height: 90%; border: 2px solid #ff9100; border-radius: 10px; }
 
-        @media (max-width: 600px) {
-            .gallery-grid { grid-template-columns: 1fr; }
-            .work-img { height: 220px; }
-        }
+        /* Кнопки */
+        .btn-row { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 400px; margin-top: 20px; }
+        .btn { padding: 15px; border-radius: 30px; text-align: center; text-decoration: none; font-family: 'Orbitron', sans-serif; font-weight: bold; cursor: pointer; border: 2px solid; transition: 0.3s; }
+        .back-btn { color: #ff9100; border-color: #ff9100; }
+        .game-btn { color: #ff0055; border-color: #ff0055; }
+        .game-btn:hover { background: #ff0055; color: #fff; }
+
+        /* Ігрове поле */
+        #game-section { display: none; margin-top: 20px; width: 320px; height: 400px; background: #000; border: 2px solid #ff0055; position: relative; overflow: hidden; touch-action: none; }
+        #gameCanvas { width: 100%; height: 100%; }
+        #score { position: absolute; top: 10px; left: 10px; color: #00ff00; font-family: 'Orbitron', sans-serif; }
     </style>
 </head>
 <body>
 
-    <div id="imgModal" class="modal" onclick="this.style.display='none'">
-        <img id="fullImg" src="">
-    </div>
+    <div id="imgModal" onclick="this.style.display='none'"><img id="fullImg"></div>
 
     <div class="header-left">
         <div class="neon-logo">Service by Snoopy</div>
-        <div id="live-clock" class="clock">Завантаження...</div>
+        <div id="live-clock" class="clock">00.00.0000 | 00:00:00</div>
     </div>
 
     <div class="main-layout">
@@ -120,131 +67,76 @@
         </div>
 
         <div class="photo-aside">
-            <h2>Work Gallery</h2>
-            <div class="gallery-grid">
-                <img src="phot01.jpg" alt="Work 1" class="work-img" onclick="openModal(this.src)">
-                <img src="phot02.jpg" alt="Work 2" class="work-img" onclick="openModal(this.src)">
+            <h2>Work</h2>
+            <div class="gallery">
+                <img src="phot01.jpg" class="work-img" onclick="showImg(this.src)">
+                <img src="phot02.jpg" class="work-img" onclick="showImg(this.src)">
             </div>
-            <p style="font-size: 0.7rem; color: #777; margin-top: 15px;">Клікніть для збільшення</p>
         </div>
     </div>
 
     <div class="btn-row">
-        <div class="game-toggle-btn" onclick="toggleGame()">🎮 GAME MODE</div>
-        <a href="index.html" class="back-btn">← НА ГОЛОВНУ</a>
+        <div class="btn game-btn" onclick="start() ">🎮 GAME MODE</div>
+        <a href="index.html" class="btn back-btn">← НА ГОЛОВНУ</a>
     </div>
 
     <div id="game-section">
-        <div id="score-board">SCORE: 0</div>
+        <div id="score">SCORE: 0</div>
         <canvas id="gameCanvas"></canvas>
     </div>
 
-    <audio id="bg-music" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-    </audio>
-    <button class="mute-btn" onclick="toggleMute()">🔊</button>
-
     <script>
-        // ФОТО МОДАЛКА
-        function openModal(src) {
-            const modal = document.getElementById('imgModal');
-            const fullImg = document.getElementById('fullImg');
-            fullImg.src = src;
-            modal.style.display = 'flex';
+        function showImg(s) { document.getElementById('fullImg').src = s; document.getElementById('imgModal').style.display = 'flex'; }
+        
+        function clock() {
+            let n = new Date();
+            document.getElementById('live-clock').innerText = n.toLocaleDateString() + " | " + n.toLocaleTimeString();
         }
+        setInterval(clock, 1000); clock();
 
-        // ГОДИННИК
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('live-clock').innerText = now.toLocaleDateString('uk-UA') + ' | ' + now.toLocaleTimeString('uk-UA');
+        // Логіка гри
+        const cvs = document.getElementById('gameCanvas');
+        const ctx = cvs.getContext('2d');
+        let active = false, score = 0, items = [], basket = { x: 125, w: 70 };
+
+        function start() {
+            active = !active;
+            document.getElementById('game-section').style.display = active ? 'block' : 'none';
+            if(active) { cvs.width = 320; cvs.height = 400; score = 0; items = []; loop(); }
         }
-        setInterval(updateClock, 1000);
-        updateClock();
-
-        // ГРА (ПОВНІСТЮ ВИПРАВЛЕНА)
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const gameSection = document.getElementById('game-section');
-        const music = document.getElementById('bg-music');
-        let gameActive = false, score = 0, items = [];
-        let basket = { x: 0, y: 0, w: 70, h: 10 };
-
-        function toggleGame() {
-            gameActive = !gameActive;
-            gameSection.style.display = gameActive ? 'block' : 'none';
-            if (gameActive) {
-                music.play().catch(() => {});
-                resize();
-                reset();
-                requestAnimationFrame(loop);
-            } else {
-                music.pause();
-                items = [];
-            }
-        }
-
-        function toggleMute() {
-            music.muted = !music.muted;
-            document.querySelector('.mute-btn').innerText = music.muted ? '🔇' : '🔊';
-        }
-
-        function resize() {
-            canvas.width = gameSection.clientWidth;
-            canvas.height = gameSection.clientHeight;
-            basket.y = canvas.height - 30;
-            basket.x = canvas.width / 2 - 35;
-        }
-
-        function reset() { score = 0; items = []; updateScore(); }
-        function updateScore() { document.getElementById('score-board').innerText = 'SCORE: ' + score; }
 
         function loop() {
-            if (!gameActive) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if(!active) return;
+            ctx.clearRect(0, 0, 320, 400);
+            if(Math.random() < 0.03) items.push({x: Math.random()*300, y: 0, bad: Math.random() < 0.2});
             
-            if (Math.random() < 0.03) {
-                items.push({ x: Math.random()*(canvas.width-30), y: -30, v: Math.random() < 0.2 });
-            }
+            ctx.fillStyle = "#ff9100";
+            ctx.fillRect(basket.x, 370, basket.w, 10);
 
-            ctx.fillStyle = '#ff9100';
-            ctx.fillRect(basket.x, basket.y, basket.w, basket.h);
+            items.forEach((it, i) => {
+                it.y += 3;
+                ctx.font = "20px Arial";
+                ctx.fillText(it.bad ? "👾" : "⚙️", it.x, it.y);
 
-            for (let i = items.length - 1; i >= 0; i--) {
-                let item = items[i];
-                item.y += 3;
-                
-                ctx.font = '24px Arial';
-                ctx.fillText(item.v ? '👾' : '⚙️', item.x, item.y);
-
-                if (item.y > basket.y - 10 && item.y < basket.y + 15 && 
-                    item.x > basket.x - 20 && item.x < basket.x + basket.w) {
-                    if (item.v) {
-                        alert('BOOM! SCORE: ' + score);
-                        toggleGame();
-                        return;
-                    } else {
-                        score++;
-                        updateScore();
-                        items.splice(i, 1);
-                        continue;
-                    }
+                if(it.y > 360 && it.x > basket.x && it.x < basket.x + basket.w) {
+                    if(it.bad) { alert("BOOM! Score: " + score); start(); }
+                    else { score++; items.splice(i, 1); document.getElementById('score').innerText = "SCORE: " + score; }
                 }
-                if (item.y > canvas.height) items.splice(i, 1);
-            }
+                if(it.y > 400) items.splice(i, 1);
+            });
             requestAnimationFrame(loop);
         }
 
-        function handleMove(e) {
-            if (!gameActive) return;
-            const rect = canvas.getBoundingClientRect();
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            let targetX = (clientX - rect.left) - basket.w/2;
-            basket.x = Math.max(0, Math.min(canvas.width - basket.w, targetX));
-        }
+        window.addEventListener('mousemove', e => {
+            let r = cvs.getBoundingClientRect();
+            basket.x = e.clientX - r.left - basket.w/2;
+        });
 
-        window.addEventListener('mousemove', handleMove);
-        window.addEventListener('touchmove', (e) => { handleMove(e); e.preventDefault(); }, {passive: false});
-        window.onresize = resize;
+        cvs.addEventListener('touchmove', e => {
+            let r = cvs.getBoundingClientRect();
+            basket.x = e.touches[0].clientX - r.left - basket.w/2;
+            e.preventDefault();
+        }, {passive: false});
     </script>
 </body>
 </html>
