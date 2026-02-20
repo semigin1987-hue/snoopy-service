@@ -4,31 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Snoopy Service - Послуги</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; }
         
         body {
-            background-color: #000;
-            background-image: 
-                linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 40%),
-                radial-gradient(circle at 50% -20%, rgba(160, 32, 240, 0.15), transparent 80%),
-                url('BG.JPG');
+            background-color: #050505;
+            background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('BG.JPG');
             background-repeat: no-repeat; 
             background-position: center; 
             background-attachment: fixed; 
             background-size: cover;
-            background-blend-mode: overlay;
             color: #e0e0e0; 
             font-family: 'Segoe UI', sans-serif;
+            margin: 0; 
+            padding: 20px; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
             min-height: 100vh;
-            padding: 20px;
         }
 
-        .header-left { align-self: flex-start; margin-bottom: 25px; position: relative; z-index: 20; }
+        /* АНІМАЦІЯ ЛОГОТИПА */
+        .header-left { align-self: flex-start; margin-bottom: 25px; }
         .neon-logo { 
             font-family: 'Orbitron', sans-serif; 
             color: #00d4ff;
@@ -36,120 +34,66 @@
             font-size: 1.2rem; 
             letter-spacing: 2px;
             text-shadow: 0 0 10px rgba(0, 212, 255, 0.7);
+            animation: pulse-light 2s infinite ease-in-out;
+            display: block;
+        }
+        @keyframes pulse-light {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.02); }
         }
 
+        /* НЕОНОВИЙ ГОДИННИК */
         .clock { 
             color: #a020f0; 
             font-family: 'Orbitron', sans-serif; 
             font-size: 0.85rem; 
             margin-top: 10px;
             padding: 6px 15px;
-            background: rgba(0, 0, 0, 0.8);
-            border: 1px solid rgba(160, 32, 240, 0.4);
+            background: rgba(160, 32, 240, 0.05);
+            border: 1px solid rgba(160, 32, 240, 0.3);
             border-radius: 12px;
             display: inline-block;
+            text-shadow: 0 0 8px rgba(160, 32, 240, 0.8);
         }
 
-        .main-layout { display: flex; flex-wrap: wrap; gap: 20px; width: 100%; max-width: 1000px; position: relative; z-index: 20; }
-        
-        .card { 
-            background: rgba(10, 10, 10, 0.9); 
-            border: 1px solid rgba(255, 255, 255, 0.15); 
-            border-radius: 25px; 
-            padding: 25px; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.9); 
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-
+        /* КАРТКИ */
+        .main-layout { display: flex; flex-wrap: wrap; gap: 20px; width: 100%; max-width: 1000px; }
+        .card { background: rgba(15, 15, 15, 0.95); border: 1px solid #333; border-radius: 25px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.7); }
         .price-container { flex: 2; min-width: 300px; }
         .photo-aside { flex: 1.5; min-width: 280px; text-align: center; }
 
-        h2 { font-family: 'Orbitron', sans-serif; color: #ff9100; margin-bottom: 15px; text-transform: uppercase; font-size: 1.1rem; }
-        
-        .service-item { 
-            display: flex; 
-            justify-content: space-between; 
-            padding: 12px 0; 
-            border-bottom: 1px solid rgba(255,255,255,0.1); 
-            align-items: center;
-            transition: 0.3s;
-        }
-        /* Ефект при наведенні на рядок послуги */
-        .service-item:hover { background: rgba(255, 255, 255, 0.03); padding-left: 5px; }
+        h2 { font-family: 'Orbitron', sans-serif; color: #ff9100; margin-top: 0; text-transform: uppercase; font-size: 1.1rem; }
+        .service-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .price { color: #00ff00; font-family: 'Orbitron', sans-serif; font-weight: bold; text-shadow: 0 0 8px rgba(0, 255, 0, 0.4); }
 
-        .price { 
-            color: #39FF14 !important; 
-            font-family: 'Orbitron', sans-serif; 
-            font-weight: 800; 
-            font-size: 1.2rem;
-            letter-spacing: 1px;
-            -webkit-text-stroke: 0.5px rgba(0,0,0,0.5);
-            text-shadow: 0 0 5px rgba(57, 255, 20, 0.3);
-            position: relative;
-            z-index: 30;
-        }
-
+        /* ГАЛЕРЕЯ */
         .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .work-img { width: 100%; height: 140px; object-fit: cover; border-radius: 12px; border: 1px solid #444; cursor: pointer; transition: 0.3s; }
         
-        /* ЕФЕКТИ ДЛЯ ФОТО */
-        .work-img { 
-            width: 100%; height: 120px; object-fit: cover; border-radius: 12px; 
-            border: 1px solid rgba(255,255,255,0.1); cursor: pointer;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.3s, border-color 0.3s;
-        }
-        .work-img:hover {
-            transform: scale(1.08) rotate(1deg);
-            filter: brightness(1.2) contrast(1.1);
-            border-color: #ff9100;
-            box-shadow: 0 10px 20px rgba(255, 145, 0, 0.3);
-            z-index: 10;
-        }
-        
-        #imgModal { display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; }
-        #imgModal img { max-width: 90%; max-height: 90%; border-radius: 10px; border: 1px solid #ff9100; }
+        #imgModal { display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; backdrop-filter: blur(8px); }
+        #imgModal img { max-width: 90%; max-height: 90%; border: 2px solid #ff9100; border-radius: 10px; }
 
-        .btn-group { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 400px; margin-top: 25px; position: relative; z-index: 20; }
-        
-        .btn { 
-            padding: 15px; 
-            border-radius: 40px; 
-            text-align: center; 
-            text-decoration: none; 
-            font-family: 'Orbitron', sans-serif; 
-            font-size: 0.85rem; 
-            font-weight: bold; 
-            cursor: pointer; 
-            border: 2px solid; 
-            text-transform: uppercase; 
-            transition: all 0.3s ease; 
-            position: relative;
-            overflow: hidden;
-        }
+        /* КНОПКИ */
+        .btn-group { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 400px; margin-top: 25px; }
+        .btn { padding: 15px; border-radius: 40px; text-align: center; text-decoration: none; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: bold; cursor: pointer; border: 2px solid; transition: 0.3s; text-transform: uppercase; }
+        .back-btn { color: #ff9100; border-color: #ff9100; }
+        .game-btn { color: #ff0055; border-color: #ff0055; }
 
-        /* ЕФЕКТИ ДЛЯ КНОПКИ ГРИ */
-        .game-btn { color: #ff0055; border-color: #ff0055; background: rgba(255, 0, 85, 0.05); }
-        .game-btn:hover { 
-            background: #ff0055; 
-            color: #fff; 
-            box-shadow: 0 0 25px rgba(255, 0, 85, 0.6);
-            transform: translateY(-3px);
+        /* ГРА */
+        #game-section { 
+            display: none; 
+            margin-top: 20px; 
+            width: 320px; 
+            height: 400px; 
+            background: #000; 
+            border: 2px solid #ff0055; 
+            border-radius: 20px; 
+            position: relative; 
+            overflow: hidden; 
+            touch-action: none;
         }
-        .game-btn:active { transform: translateY(0); }
-
-        /* ЕФЕКТИ ДЛЯ КНОПКИ НАЗАД */
-        .back-btn { color: #ff9100; border-color: #ff9100; background: rgba(255, 145, 0, 0.05); }
-        .back-btn:hover { 
-            background: #ff9100; 
-            color: #000; 
-            box-shadow: 0 0 25px rgba(255, 145, 0, 0.6);
-            transform: translateY(-3px);
-        }
-        .back-btn:active { transform: translateY(0); }
-
-        #game-section { display: none; margin-top: 20px; width: 320px; height: 400px; background: #000; border: 2px solid #ff0055; border-radius: 20px; position: relative; overflow: hidden; z-index: 20; touch-action: none; }
         #gameCanvas { width: 100%; height: 100%; }
-        #score { position: absolute; top: 10px; left: 15px; color: #39FF14; font-family: 'Orbitron', sans-serif; z-index: 21; }
+        #score { position: absolute; top: 10px; left: 15px; color: #00ff00; font-family: 'Orbitron', sans-serif; z-index: 10; }
     </style>
 </head>
 <body>
@@ -164,10 +108,17 @@
     <div class="main-layout">
         <div class="card price-container">
             <h2>Наші послуги</h2>
-            <div class="service-item"><span>Чистка та заміна пасти</span> <span class="price">від 600 ₴</span></div>
-            <div class="service-item"><span>Збірка та апгрейд ПК</span> <span class="price">1000 ₴</span></div>
+            <div class="service-item"><span>Чиста та заманіа паста</span> <span class="price">від 600 ₴</span></div>
+            <div class="service-item"><span>Збіїска та ангрдеуід ПК</span> <span class="price">1000 ₴</span></div>
+            <div class="service-item"><span>Збіїска тт ПЗ</span> <span class="price">650 ₴</span></div>
             <div class="service-item"><span>Windows та ПЗ</span> <span class="price">650 ₴</span></div>
             <div class="service-item"><span>Виїзд майстра</span> <span class="price">від 500 ₴</span></div>
         </div>
 
         <div class="card photo-aside">
+            <h2>Портфоліо</h2>
+            <div class="gallery">
+                <img src="phot01.jpg" class="work-img" onclick="showImg(this.src)">
+                <img src="photo777.png" class="work-img" onclick="showImg(this.src)" onerror="this.src='phot01.jpg'">
+                <img src="photo888.jpg" class="work-img" onclick="showImg(this.src)" onerror="this.src='phot01.jpg'">
+                <img src="gemini1.png" class="work-
