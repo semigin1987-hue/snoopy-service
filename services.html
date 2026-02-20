@@ -6,7 +6,7 @@
     <title>Snoopy Service - Послуги</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; scroll-behavior: smooth; } /* Плавний скрол по всій сторінці */
         
         body {
             background-color: #0a0a0a;
@@ -42,7 +42,7 @@
             width: 100%;
             max-width: 1000px;
             align-items: flex-start;
-            margin-bottom: 40px;
+            margin-bottom: 20px;
         }
 
         .price-container, .photo-aside {
@@ -68,27 +68,51 @@
         .price { font-family: 'Orbitron', sans-serif; color: #00ff00; font-weight: bold; }
 
         /* КНОПКИ КЕРУВАННЯ */
-        .btn-row { display: flex; gap: 15px; width: 100%; max-width: 1000px; margin-top: 20px; }
+        .btn-row { 
+            display: flex; 
+            flex-direction: column; /* На мобілках одна під одною */
+            gap: 15px; 
+            width: 100%; 
+            max-width: 500px; 
+            margin-top: 20px; 
+        }
 
         .back-btn, .game-toggle-btn {
-            flex: 1;
-            padding: 15px;
+            padding: 18px;
             text-decoration: none;
             border-radius: 50px;
             font-family: 'Orbitron', sans-serif;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             font-weight: bold;
             text-align: center;
             transition: 0.3s;
             cursor: pointer;
             text-transform: uppercase;
+            border: 2px solid;
         }
 
-        .back-btn { color: #fff; border: 2px solid #555; background: transparent; }
-        .back-btn:hover { background: #fff; color: #000; }
+        /* ОНОВЛЕНА ПОМАРАНЧЕВА КНОПКА НА ГОЛОВНУ */
+        .back-btn { 
+            color: #ff9100; 
+            border-color: #ff9100; 
+            background: transparent; 
+        }
+        .back-btn:hover { 
+            background: #ff9100; 
+            color: #000; 
+            box-shadow: 0 0 15px rgba(255, 145, 0, 0.4);
+        }
 
-        .game-toggle-btn { color: #ff0055; border: 2px solid #ff0055; background: transparent; box-shadow: 0 0 10px rgba(255, 0, 85, 0.2); }
-        .game-toggle-btn:hover { background: #ff0055; color: #fff; box-shadow: 0 0 20px rgba(255, 0, 85, 0.5); }
+        .game-toggle-btn { 
+            color: #ff0055; 
+            border-color: #ff0055; 
+            background: transparent; 
+        }
+        .game-toggle-btn:hover { 
+            background: #ff0055; 
+            color: #fff; 
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.5);
+        }
 
         /* СЕКЦІЯ ГРИ */
         #game-section {
@@ -99,7 +123,7 @@
             background: #000;
             border: 2px solid #ff0055;
             border-radius: 25px;
-            margin-top: 30px;
+            margin-top: 40px;
             position: relative;
             overflow: hidden;
             touch-action: none;
@@ -124,121 +148,21 @@
             <div class="service-item"><span>Чистка + паста</span> <span class="price">500 ₴</span></div>
             <div class="service-item"><span>Збірка ПК</span> <span class="price">1000 ₴</span></div>
             <div class="service-item"><span>Windows + Soft</span> <span class="price">450 ₴</span></div>
+            <div class="service-item"><span>Оптимізація</span> <span class="price">300 ₴</span></div>
         </div>
 
         <div class="photo-aside">
             <h2>Work</h2>
-            <div style="display: flex; gap: 10px;">
-                <img src="WORK1.JPG" alt="1" style="width: 100%; border-radius: 10px;">
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <img src="WORK1.JPG" alt="Work 1" style="width: 100%; border-radius: 15px; border: 1px solid #333;">
+                <p style="font-size: 0.7rem; color: #666; text-align: center;">Галерея робіт</p>
             </div>
         </div>
     </div>
 
     <div class="btn-row">
-        <a href="index.html" class="back-btn">← НА ГОЛОВНУ</a>
         <div class="game-toggle-btn" onclick="toggleGame()">🎮 GAME MODE</div>
+        <a href="index.html" class="back-btn">← НА ГОЛОВНУ</a>
     </div>
 
-    <div id="game-section">
-        <div id="score-board">SCORE: 0</div>
-        <canvas id="gameCanvas"></canvas>
-    </div>
-
-    <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const gameSection = document.getElementById('game-section');
-        let gameActive = false;
-        let score = 0;
-        let basket = { x: 170, y: 400, w: 70, h: 10 };
-        let items = [];
-
-        function toggleGame() {
-            gameActive = !gameActive;
-            gameSection.style.display = gameActive ? 'block' : 'none';
-            if (gameActive) {
-                resizeCanvas();
-                resetGame();
-                requestAnimationFrame(update);
-            }
-        }
-
-        function resizeCanvas() {
-            canvas.width = gameSection.offsetWidth;
-            canvas.height = gameSection.offsetHeight;
-            basket.y = canvas.height - 30;
-        }
-
-        function resetGame() {
-            score = 0;
-            items = [];
-            updateScore();
-        }
-
-        function updateScore() {
-            document.getElementById('score-board').innerText = 'SCORE: ' + score;
-        }
-
-        function spawnItem() {
-            if (Math.random() < 0.03) {
-                const isVirus = Math.random() < 0.3;
-                items.push({
-                    x: Math.random() * (canvas.width - 20),
-                    y: -20,
-                    size: 25,
-                    speed: 3 + (score / 10),
-                    isVirus: isVirus
-                });
-            }
-        }
-
-        function update() {
-            if (!gameActive) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            spawnItem();
-
-            // Кошик майстра
-            ctx.fillStyle = '#ff9100';
-            ctx.shadowBlur = 10;
-            ctx.shadowColor = '#ff9100';
-            ctx.fillRect(basket.x, basket.y, basket.w, basket.h);
-            ctx.shadowBlur = 0;
-
-            items.forEach((item, i) => {
-                item.y += item.speed;
-                ctx.font = '20px Arial';
-                ctx.fillText(item.isVirus ? '👾' : '⚙️', item.x, item.y);
-
-                // Колізія
-                if (item.y > basket.y && item.x > basket.x && item.x < basket.x + basket.w) {
-                    if (item.isVirus) {
-                        alert('SYSTEM OVERLOAD! Твій рахунок: ' + score);
-                        toggleGame();
-                    } else {
-                        score++;
-                        updateScore();
-                        items.splice(i, 1);
-                    }
-                }
-
-                if (item.y > canvas.height) items.splice(i, 1);
-            });
-
-            requestAnimationFrame(update);
-        }
-
-        // Керування тачем
-        gameSection.addEventListener('touchmove', (e) => {
-            const touch = e.touches[0];
-            const rect = canvas.getBoundingClientRect();
-            basket.x = touch.clientX - rect.left - basket.w / 2;
-            if (basket.x < 0) basket.x = 0;
-            if (basket.x > canvas.width - basket.w) basket.x = canvas.width - basket.w;
-            e.preventDefault();
-        }, { passive: false });
-
-        window.onresize = resizeCanvas;
-    </script>
-
-</body>
-</html>
+    <div id="game-
