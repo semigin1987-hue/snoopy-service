@@ -71,9 +71,10 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             border: 2px solid;
+            cursor: pointer;
         }
 
-        /* TELEGRAM - СИНІЙ НЕОН */
+        /* ТЕЛЕГРАМ - СИНІЙ НЕОН */
         .btn-telegram {
             color: #00d4ff;
             border-color: #00d4ff;
@@ -85,7 +86,7 @@
             box-shadow: 0 0 30px rgba(0, 212, 255, 0.6);
         }
 
-        /* WELCOME - ЗЕЛЕНИЙ НЕОН */
+        /* WELCOME - ЗЕЛЕНИЙ НЕОН (ЗІ ШВИДКИМ ЗВУКОМ) */
         .btn-welcome {
             color: #00ff88;
             border-color: #00ff88;
@@ -136,16 +137,17 @@
 
         if (welcomeBtn) {
             welcomeBtn.addEventListener('click', function(e) {
+                // Зупиняємо миттєвий перехід
                 e.preventDefault(); 
                 const targetUrl = this.getAttribute('href');
 
-                winSound.play().then(() => {
-                    setTimeout(() => {
-                        window.location.href = targetUrl;
-                    }, 1500);
-                }).catch(() => {
+                // Граємо звук
+                winSound.play();
+
+                // Швидка затримка (500мс), щоб не гальмувати перехід
+                setTimeout(() => {
                     window.location.href = targetUrl;
-                });
+                }, 500); 
             });
         }
     </script>
