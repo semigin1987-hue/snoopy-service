@@ -25,7 +25,7 @@
             min-height: 100vh;
         }
 
-        /* ПУЛЬСУЮЧИЙ ЛОГОТИП */
+        /* АНИМАЦИЯ ЛОГОТИПА */
         .header-left { align-self: flex-start; margin-bottom: 25px; }
         .neon-logo { 
             font-family: 'Orbitron', sans-serif; 
@@ -35,13 +35,14 @@
             letter-spacing: 2px;
             text-shadow: 0 0 10px rgba(0, 212, 255, 0.7);
             animation: pulse-light 2s infinite ease-in-out;
+            display: block;
         }
         @keyframes pulse-light {
             0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.8; transform: scale(1.02); }
         }
 
-        /* НЕОНОВИЙ ГОДИННИК */
+        /* НЕОНОВЫЕ ЧАСЫ */
         .clock { 
             color: #a020f0; 
             font-family: 'Orbitron', sans-serif; 
@@ -53,10 +54,9 @@
             border-radius: 12px;
             display: inline-block;
             text-shadow: 0 0 8px rgba(160, 32, 240, 0.8);
-            box-shadow: inset 0 0 10px rgba(160, 32, 240, 0.1);
         }
 
-        /* МАКЕТ СТОРІНКИ */
+        /* КАРТОЧКИ И КОНТЕНТ */
         .main-layout { display: flex; flex-wrap: wrap; gap: 20px; width: 100%; max-width: 1000px; }
         .card { background: rgba(15, 15, 15, 0.95); border: 1px solid #333; border-radius: 25px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.7); }
         .price-container { flex: 2; min-width: 300px; }
@@ -64,20 +64,13 @@
 
         h2 { font-family: 'Orbitron', sans-serif; color: #ff9100; margin-top: 0; text-transform: uppercase; font-size: 1.1rem; }
         .service-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        
-        .price { 
-            color: #00ff00; 
-            font-family: 'Orbitron', sans-serif; 
-            font-weight: bold; 
-            text-shadow: 0 0 8px rgba(0, 255, 0, 0.4);
-        }
+        .price { color: #00ff00; font-family: 'Orbitron', sans-serif; font-weight: bold; text-shadow: 0 0 8px rgba(0, 255, 0, 0.4); }
 
-        /* ГАЛЕРЕЯ (2x2) */
+        /* ГАЛЕРЕЯ */
         .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
         .work-img { width: 100%; height: 140px; object-fit: cover; border-radius: 12px; border: 1px solid #444; cursor: pointer; transition: 0.3s; }
-        .work-img:hover { border-color: #ff9100; transform: scale(1.02); }
         
-        #imgModal { display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; backdrop-filter: blur(8px); cursor: zoom-out; }
+        #imgModal { display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; backdrop-filter: blur(8px); }
         #imgModal img { max-width: 90%; max-height: 90%; border: 2px solid #ff9100; border-radius: 10px; }
 
         /* КНОПКИ */
@@ -86,7 +79,7 @@
         .back-btn { color: #ff9100; border-color: #ff9100; }
         .game-btn { color: #ff0055; border-color: #ff0055; }
 
-        /* ГРА ТА СКРОЛІНГ */
+        /* ИГРА */
         #game-section { 
             display: none; 
             margin-top: 20px; 
@@ -99,7 +92,7 @@
             overflow: hidden; 
             touch-action: none;
         }
-        #gameCanvas { width: 100%; height: 100%; background: radial-gradient(circle, #111, #000); }
+        #gameCanvas { width: 100%; height: 100%; }
         #score { position: absolute; top: 10px; left: 15px; color: #00ff00; font-family: 'Orbitron', sans-serif; z-index: 10; }
     </style>
 </head>
@@ -109,7 +102,7 @@
 
     <div class="header-left">
         <div class="neon-logo">Snoopy Digital Service</div>
-        <div id="live-clock" class="clock">00.00.0000 | 00:00:00</div>
+        <div id="live-clock" class="clock">Завантаження...</div>
     </div>
 
     <div class="main-layout">
@@ -129,7 +122,6 @@
                 <img src="photo888.jpg" class="work-img" onclick="showImg(this.src)" onerror="this.src='phot01.jpg'">
                 <img src="gemini1.png" class="work-img" onclick="showImg(this.src)" onerror="this.src='phot01.jpg'">
             </div>
-            <p style="font-size: 0.7rem; color: #777; margin-top: 10px;">Клікніть для збільшення</p>
         </div>
     </div>
 
@@ -144,7 +136,11 @@
     </div>
 
     <script>
-        function showImg(src) { document.getElementById('fullImg').src = src; document.getElementById('imgModal').style.display = 'flex'; }
+        // ФУНКЦИИ ИНТЕРФЕЙСА
+        function showImg(src) { 
+            document.getElementById('fullImg').src = src; 
+            document.getElementById('imgModal').style.display = 'flex'; 
+        }
         
         function updateClock() {
             let now = new Date();
@@ -155,6 +151,7 @@
         setInterval(updateClock, 1000); 
         updateClock();
 
+        // ЛОГИКА ИГРЫ
         const cvs = document.getElementById('gameCanvas');
         const ctx = cvs.getContext('2d');
         const scoreEl = document.getElementById('score');
@@ -173,4 +170,32 @@
             if(!active) return;
             ctx.clearRect(0, 0, 320, 400);
             if(Math.random() < 0.035) items.push({ x: Math.random()*290, y: -20, bad: Math.random() < 0.2 });
-            ctx.fillStyle = "#
+            ctx.fillStyle = "#ff9100";
+            ctx.fillRect(basket.x, 375, basket.w, 10);
+            for(let i = items.length - 1; i >= 0; i--) {
+                let it = items[i];
+                it.y += (3.5 + (score * 0.05));
+                ctx.font = "24px Arial";
+                ctx.fillText(it.bad ? "👾" : "⚙️", it.x, it.y);
+                if(it.y > 365 && it.y < 385 && it.x > basket.x - 10 && it.x < basket.x + basket.w) {
+                    if(it.bad) { alert("ГРУ ЗАКІНЧЕНО! SCORE: " + score); toggleGame(); return; }
+                    else { score++; scoreEl.innerText = "SCORE: " + score; items.splice(i, 1); continue; }
+                }
+                if(it.y > 410) items.splice(i, 1);
+            }
+            requestAnimationFrame(gameLoop);
+        }
+
+        function move(clientX) {
+            let rect = cvs.getBoundingClientRect();
+            let x = clientX - rect.left - basket.w/2;
+            basket.x = Math.max(0, Math.min(320 - basket.w, x));
+        }
+
+        window.addEventListener('mousemove', e => { if(active) move(e.clientX); });
+        cvs.addEventListener('touchmove', e => {
+            if(active) { move(e.touches[0].clientX); e.preventDefault(); }
+        }, {passive: false});
+    </script>
+</body>
+</html>
