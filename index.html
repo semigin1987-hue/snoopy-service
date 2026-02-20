@@ -74,7 +74,7 @@
             cursor: pointer;
         }
 
-        /* ТЕЛЕГРАМ - СИНІЙ НЕОН */
+        /* TELEGRAM - СИНІЙ */
         .btn-telegram {
             color: #00d4ff;
             border-color: #00d4ff;
@@ -86,7 +86,7 @@
             box-shadow: 0 0 30px rgba(0, 212, 255, 0.6);
         }
 
-        /* WELCOME - ЗЕЛЕНИЙ НЕОН (ЗІ ШВИДКИМ ЗВУКОМ) */
+        /* WELCOME - ЗЕЛЕНИЙ */
         .btn-welcome {
             color: #00ff88;
             border-color: #00ff88;
@@ -98,7 +98,7 @@
             box-shadow: 0 0 35px rgba(0, 255, 136, 0.7);
         }
 
-        /* ТЕЛЕФОН - ПОМАРАНЧЕВИЙ НЕОН */
+        /* ТЕЛЕФОН - ПОМАРАНЧЕВИЙ */
         .btn-phone {
             color: #ff9100;
             border-color: #ff9100;
@@ -123,7 +123,7 @@
             
             <a href="services.html" class="btn btn-welcome">Welcome</a>
             
-            <a href="tel:+380932555434" class="btn btn-phone">Зателефонувати</a>
+            <a href="tel:+380XXXXXXXXX" class="btn btn-phone">Зателефонувати</a>
         </div>
     </div>
 
@@ -136,22 +136,12 @@
         const winSound = document.getElementById('win11-sound');
 
         if (welcomeBtn) {
-            welcomeBtn.addEventListener('click', function(e) {
-                // Зупиняємо миттєвий перехід
-                e.preventDefault(); 
-                const targetUrl = this.getAttribute('href');
-
-                // Граємо звук
+            welcomeBtn.addEventListener('click', function() {
+                // Запускаємо звук і відразу даємо браузеру перейти за посиланням
                 winSound.play();
-
-                // Швидка затримка (500мс), щоб не гальмувати перехід
-                setTimeout(() => {
-                    window.location.href = targetUrl;
-                }, 500); 
             });
         }
     </script>
 
 </body>
 </html>
-
