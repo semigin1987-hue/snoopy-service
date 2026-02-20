@@ -31,7 +31,7 @@
         .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
         .work-img { width: 100%; height: 160px; object-fit: cover; border-radius: 12px; border: 1px solid #444; cursor: pointer; transition: 0.3s; }
         
-        #imgModal { display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; backdrop-filter: blur(8px); }
+        #imgModal { display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; backdrop-filter: blur(8px); cursor: zoom-out; }
         #imgModal img { max-width: 90%; max-height: 90%; border: 2px solid #ff9100; border-radius: 10px; }
 
         .btn-group { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 400px; margin-top: 25px; }
@@ -39,6 +39,7 @@
         .back-btn { color: #ff9100; border-color: #ff9100; }
         .game-btn { color: #ff0055; border-color: #ff0055; }
 
+        /* Гра без звуку та з фіксованим скролом */
         #game-section { display: none; margin-top: 20px; width: 320px; height: 400px; background: #000; border: 2px solid #ff0055; border-radius: 20px; position: relative; overflow: hidden; touch-action: none; }
         #gameCanvas { width: 100%; height: 100%; background: radial-gradient(circle, #111, #000); }
         #score { position: absolute; top: 10px; left: 15px; color: #00ff00; font-family: 'Orbitron', sans-serif; z-index: 10; }
@@ -66,9 +67,9 @@
             <h2>Портфоліо</h2>
             <div class="gallery">
                 <img src="phot01.jpg" class="work-img" onclick="showImg(this.src)">
-                <img src="phot02.jpg" class="work-img" id="secondPhoto" onclick="showImg(this.src)" 
-                     onerror="tryFixPhoto(this)">
+                <img src="photo777.png" class="work-img" onclick="showImg(this.src)" onerror="this.src='phot02.jpg'">
             </div>
+            <p style="font-size: 0.7rem; color: #777; margin-top: 10px;">Клікніть для збільшення</p>
         </div>
     </div>
 
@@ -82,21 +83,7 @@
         <canvas id="gameCanvas"></canvas>
     </div>
 
-    <audio id="game-audio" loop preload="auto">
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-    </audio>
-
     <script>
-        // АВТОМАТИЧНЕ ВИПРАВЛЕННЯ НАЗВИ ФОТО
-        let variants = ['PHOTO2.JPG', 'photo2.jpg', 'phot02.JPG', 'phot2.jpg'];
-        let vIdx = 0;
-        function tryFixPhoto(img) {
-            if (vIdx < variants.length) {
-                img.src = variants[vIdx];
-                vIdx++;
-            }
-        }
-
         function showImg(src) { document.getElementById('fullImg').src = src; document.getElementById('imgModal').style.display = 'flex'; }
         
         function updateClock() {
@@ -108,7 +95,6 @@
         const cvs = document.getElementById('gameCanvas');
         const ctx = cvs.getContext('2d');
         const scoreEl = document.getElementById('score');
-        const audio = document.getElementById('game-audio');
         let active = false, score = 0, items = [], basket = { x: 125, w: 70 };
 
         function toggleGame() {
@@ -116,15 +102,14 @@
             document.getElementById('game-section').style.display = active ? 'block' : 'none';
             if(active) { 
                 cvs.width = 320; cvs.height = 400; score = 0; scoreEl.innerText = "SCORE: 0"; items = []; 
-                audio.play().catch(() => console.log("Музика готова"));
                 requestAnimationFrame(gameLoop); 
-            } else { audio.pause(); }
+            }
         }
 
         function gameLoop() {
             if(!active) return;
             ctx.clearRect(0, 0, 320, 400);
-            if(Math.random() < 0.03) items.push({ x: Math.random()*290, y: -20, bad: Math.random() < 0.2 });
+            if(Math.random() < 0.035) items.push({ x: Math.random()*290, y: -20, bad: Math.random() < 0.2 });
             ctx.fillStyle = "#ff9100";
             ctx.fillRect(basket.x, 375, basket.w, 10);
             for(let i = items.length - 1; i >= 0; i--) {
@@ -133,7 +118,7 @@
                 ctx.font = "24px Arial";
                 ctx.fillText(it.bad ? "👾" : "⚙️", it.x, it.y);
                 if(it.y > 365 && it.y < 385 && it.x > basket.x - 10 && it.x < basket.x + basket.w) {
-                    if(it.bad) { alert("Кінець гри! Рахунок: " + score); toggleGame(); return; }
+                    if(it.bad) { alert("ГРУ ЗАКІНЧЕНО! Рахунок: " + score); toggleGame(); return; }
                     else { score++; scoreEl.innerText = "SCORE: " + score; items.splice(i, 1); continue; }
                 }
                 if(it.y > 410) items.splice(i, 1);
@@ -148,8 +133,13 @@
         }
 
         window.addEventListener('mousemove', e => { if(active) move(e.clientX); });
+        
+        // Покращене керування для тачскрінів без скролінгу
         cvs.addEventListener('touchmove', e => {
-            if(active) { move(e.touches[0].clientX); e.preventDefault(); }
+            if(active) { 
+                move(e.touches[0].clientX); 
+                e.preventDefault(); 
+            }
         }, {passive: false});
     </script>
 </body>
