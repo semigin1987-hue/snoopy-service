@@ -8,7 +8,7 @@
     <style>
         * { box-sizing: border-box; }
         body {
-            background-color: #050505; /* Захист від білого фону */
+            background-color: #050505;
             background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('BG.JPG');
             background-repeat: no-repeat; background-position: center; background-attachment: fixed; background-size: cover;
             color: #e0e0e0; font-family: 'Segoe UI', sans-serif;
@@ -42,7 +42,6 @@
         #game-section { display: none; margin-top: 20px; width: 320px; height: 400px; background: #000; border: 2px solid #ff0055; border-radius: 20px; position: relative; overflow: hidden; touch-action: none; }
         #gameCanvas { width: 100%; height: 100%; background: radial-gradient(circle, #111, #000); }
         #score { position: absolute; top: 10px; left: 15px; color: #00ff00; font-family: 'Orbitron', sans-serif; z-index: 10; }
-        .mute-btn { position: absolute; bottom: 10px; right: 10px; background: none; border: 1px solid #ff0055; color: #ff0055; padding: 5px 10px; border-radius: 15px; font-size: 0.7rem; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -67,8 +66,8 @@
             <h2>Портфоліо</h2>
             <div class="gallery">
                 <img src="phot01.jpg" class="work-img" onclick="showImg(this.src)">
-                <img src="phot02.jpg" class="work-img" id="targetPhoto" onclick="showImg(this.src)" 
-                     onerror="tryNextSource(this)">
+                <img src="phot02.jpg" class="work-img" id="secondPhoto" onclick="showImg(this.src)" 
+                     onerror="tryFixPhoto(this)">
             </div>
         </div>
     </div>
@@ -81,7 +80,6 @@
     <div id="game-section">
         <div id="score">SCORE: 0</div>
         <canvas id="gameCanvas"></canvas>
-        <button class="mute-btn" onclick="toggleMute()">🔊 SOUND</button>
     </div>
 
     <audio id="game-audio" loop preload="auto">
@@ -89,13 +87,13 @@
     </audio>
 
     <script>
-        // Функція для пошуку фото, якщо назва phot02.jpg не спрацювала
-        let sources = ['PHOTO2.JPG', 'photo2.jpg', 'phot02.JPG', 'photo02.jpg'];
-        let currentIdx = 0;
-        function tryNextSource(img) {
-            if (currentIdx < sources.length) {
-                img.src = sources[currentIdx];
-                currentIdx++;
+        // АВТОМАТИЧНЕ ВИПРАВЛЕННЯ НАЗВИ ФОТО
+        let variants = ['PHOTO2.JPG', 'photo2.jpg', 'phot02.JPG', 'phot2.jpg'];
+        let vIdx = 0;
+        function tryFixPhoto(img) {
+            if (vIdx < variants.length) {
+                img.src = variants[vIdx];
+                vIdx++;
             }
         }
 
@@ -117,16 +115,10 @@
             active = !active;
             document.getElementById('game-section').style.display = active ? 'block' : 'none';
             if(active) { 
-                cvs.width = 320; cvs.height = 400; 
-                score = 0; scoreEl.innerText = "SCORE: 0"; items = []; 
-                audio.play().catch(() => console.log("Sound ready"));
+                cvs.width = 320; cvs.height = 400; score = 0; scoreEl.innerText = "SCORE: 0"; items = []; 
+                audio.play().catch(() => console.log("Музика готова"));
                 requestAnimationFrame(gameLoop); 
             } else { audio.pause(); }
-        }
-
-        function toggleMute() {
-            audio.muted = !audio.muted;
-            event.target.innerText = audio.muted ? "🔇 MUTE" : "🔊 SOUND";
         }
 
         function gameLoop() {
@@ -141,7 +133,7 @@
                 ctx.font = "24px Arial";
                 ctx.fillText(it.bad ? "👾" : "⚙️", it.x, it.y);
                 if(it.y > 365 && it.y < 385 && it.x > basket.x - 10 && it.x < basket.x + basket.w) {
-                    if(it.bad) { alert("BOOM! SCORE: " + score); toggleGame(); return; }
+                    if(it.bad) { alert("Кінець гри! Рахунок: " + score); toggleGame(); return; }
                     else { score++; scoreEl.innerText = "SCORE: " + score; items.splice(i, 1); continue; }
                 }
                 if(it.y > 410) items.splice(i, 1);
