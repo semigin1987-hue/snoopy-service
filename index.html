@@ -73,12 +73,11 @@
             border: 2px solid;
         }
 
-        /* ТЕЛЕГРАМ - СИНИЙ НЕОН */
+        /* TELEGRAM - СИНІЙ НЕОН */
         .btn-telegram {
             color: #00d4ff;
             border-color: #00d4ff;
             background: transparent;
-            box-shadow: inset 0 0 10px rgba(0, 212, 255, 0.2);
         }
         .btn-telegram:hover {
             background: #00d4ff;
@@ -86,17 +85,70 @@
             box-shadow: 0 0 30px rgba(0, 212, 255, 0.6);
         }
 
-        /* WELCOME - БЕЛЫЙ НЕОН + ЗВУК */
+        /* WELCOME - ЗЕЛЕНИЙ НЕОН */
         .btn-welcome {
-            color: #ffffff;
-            border-color: #ffffff;
-            background: rgba(255, 255, 255, 0.1);
+            color: #00ff88;
+            border-color: #00ff88;
+            background: rgba(0, 255, 136, 0.05);
         }
         .btn-welcome:hover {
-            background: #ffffff;
+            background: #00ff88;
             color: #000;
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.6);
+            box-shadow: 0 0 35px rgba(0, 255, 136, 0.7);
         }
 
-        /* ТЕЛЕФОН - ОРАНЖЕВЫЙ НЕОН */
-        .btn-phone
+        /* ТЕЛЕФОН - ПОМАРАНЧЕВИЙ НЕОН */
+        .btn-phone {
+            color: #ff9100;
+            border-color: #ff9100;
+            background: transparent;
+        }
+        .btn-phone:hover {
+            background: #ff9100;
+            color: #000;
+            box-shadow: 0 0 30px rgba(255, 145, 0, 0.6);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>SNOOPY</h1>
+        <div class="subtitle">Service Center</div>
+        
+        <div class="btn-group">
+            <a href="https://t.me/Snoopy77787" target="_blank" class="btn btn-telegram">Telegram</a>
+            
+            <a href="services.html" class="btn btn-welcome">Welcome</a>
+            
+            <a href="tel:+380XXXXXXXXX" class="btn btn-phone">Зателефонувати</a>
+        </div>
+    </div>
+
+    <audio id="win11-sound" preload="auto">
+        <source src="https://www.myinstants.com/media/sounds/windows-11-startup-sound.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const welcomeBtn = document.querySelector('.btn-welcome');
+        const winSound = document.getElementById('win11-sound');
+
+        if (welcomeBtn) {
+            welcomeBtn.addEventListener('click', function(e) {
+                e.preventDefault(); 
+                const targetUrl = this.getAttribute('href');
+
+                winSound.play().then(() => {
+                    setTimeout(() => {
+                        window.location.href = targetUrl;
+                    }, 1500);
+                }).catch(() => {
+                    window.location.href = targetUrl;
+                });
+            });
+        }
+    </script>
+
+</body>
+</html>
