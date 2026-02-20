@@ -19,20 +19,20 @@
             display: flex;
             justify-content: center;
             min-height: 100vh;
-            position: relative; /* Чтобы логотип позиционировался относительно края страницы */
+            position: relative;
         }
 
-        /* КРУТОЙ ЛОГОТИП СЛЕВА СВЕРХУ */
+        /* НАПИС: ОПУЩЕНИЙ І МАТОВИЙ */
         .logo-top-left {
             position: absolute;
-            top: 20px;
-            left: 20px;
+            top: 50px; /* Опустили з 20px до 50px */
+            left: 30px;
             font-family: 'Orbitron', sans-serif;
-            font-size: 1rem;
-            color: #00d4ff; /* Голубой как на главной */
+            font-size: 1.2rem;
+            color: #00d4ff;
             letter-spacing: 2px;
             text-transform: uppercase;
-            opacity: 0.6; /* Матовый эффект (полупрозрачность) */
+            opacity: 0.5; /* Матовий ефект */
         }
 
         .container {
@@ -43,7 +43,8 @@
             border-radius: 25px;
             padding: 35px;
             align-self: center;
-            margin-top: 40px; /* Чтобы не наезжало на логотип на мобилках */
+            margin-top: 80px; /* Збільшили відступ, щоб логотип не заважав на мобільних */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         h2 {
@@ -60,7 +61,6 @@
             margin-top: 25px;
             margin-bottom: 10px;
             text-transform: uppercase;
-            letter-spacing: 1px;
             opacity: 0.8;
         }
 
@@ -76,6 +76,7 @@
             font-weight: bold;
         }
 
+        /* Матова кнопка в стилі головної */
         .back-btn {
             display: block;
             padding: 15px;
@@ -97,19 +98,14 @@
             transform: scale(1.02);
         }
 
-        .footer-note {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.8rem;
-            color: #666;
-        }
-
-        /* Для мобильных устройств, чтобы логотип был чуть меньше */
         @media (max-width: 480px) {
             .logo-top-left {
-                font-size: 0.7rem;
-                top: 10px;
-                left: 10px;
+                top: 30px; /* На телефонах трохи вище, щоб не перекривало */
+                left: 20px;
+                font-size: 0.8rem;
+            }
+            .container {
+                margin-top: 60px;
             }
         }
     </style>
@@ -135,7 +131,9 @@
 
         <a href="index.html" class="back-btn">← НА ГОЛОВНУ</a>
         
-        <div class="footer-note">🛡️ Гарантія на всі види робіт</div>
+        <div class="footer-note" style="text-align: center; margin-top: 20px; color: #666; font-size: 0.8rem;">
+            🛡️ Гарантія на всі види робіт
+        </div>
     </div>
 
 </body>
