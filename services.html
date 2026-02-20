@@ -1,105 +1,185 @@
-<script>
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    const gameSection = document.getElementById('game-section');
-    let gameActive = false;
-    let score = 0;
-    let basket = { x: 170, y: 400, w: 70, h: 10 };
-    let items = [];
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snoopy Service - Послуги та Ціни</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
 
-    function toggleGame() {
-        gameActive = !gameActive;
-        gameSection.style.display = gameActive ? 'block' : 'none';
+        body {
+            background-color: #0a0a0a;
+            background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('BG.JPG');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #ffffff;
+            font-family: 'Orbitron', sans-serif;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 30px;
+            border: 1px solid rgba(160, 32, 240, 0.2);
+            backdrop-filter: blur(20px);
+            padding: 30px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 1);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: #a020f0; /* Бузковий колір */
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px rgba(160, 32, 240, 0.6);
+        }
+
+        .price-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 30px 0;
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .service-name {
+            font-size: 0.85rem;
+            color: #ccc;
+            letter-spacing: 1px;
+        }
+
+        /* ЯСКРАВО-ЗЕЛЕНІ ЦІНИ */
+        .service-price {
+            font-weight: 700;
+            color: #00ff88;
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.6);
+            white-space: nowrap;
+        }
+
+        /* БЛОК ГРИ */
+        .game-box {
+            background: rgba(160, 32, 240, 0.05);
+            border: 1px solid rgba(160, 32, 240, 0.2);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #game-canvas {
+            background: #000;
+            border: 2px solid #a020f0;
+            border-radius: 10px;
+            cursor: crosshair;
+            max-width: 100%;
+            display: block;
+            margin: 15px auto;
+        }
+
+        /* КНОПКА НАЗАД */
+        .back-btn {
+            display: block;
+            width: 200px;
+            margin: 0 auto;
+            text-align: center;
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 15px;
+            border: 2px solid #a020f0;
+            border-radius: 50px;
+            transition: 0.3s;
+            background: transparent;
+        }
+
+        .back-btn:hover {
+            background: #a020f0;
+            box-shadow: 0 0 25px rgba(160, 32, 240, 0.5);
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Наші Послуги</h2>
         
-        if (gameActive) {
-            resizeCanvas();
-            resetGame();
-            setTimeout(() => {
-                gameSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 100);
-            requestAnimationFrame(update);
+        <ul class="price-list">
+            <li class="price-item"><span class="service-name">Діагностика</span><span class="service-price">БЕЗКОШТОВНО</span></li>
+            <li class="price-item"><span class="service-name">Профілактика (чистка + паста)</span><span class="service-price">450 грн</span></li>
+            <li class="price-item"><span class="service-name">Встановлення ОС Windows 10/11</span><span class="service-price">500 грн</span></li>
+            <li class="price-item"><span class="service-name">Заміна комплектуючих</span><span class="service-price">від 300 грн</span></li>
+            <li class="price-item"><span class="service-name">Складання ігрових ПК</span><span class="service-price">від 1200 грн</span></li>
+        </ul>
+
+        <div class="game-box">
+            <span style="color: #a020f0; font-size: 0.7rem; letter-spacing: 2px;">RELAX ZONE: CLICK THE DOT</span>
+            <canvas id="game-canvas" width="280" height="150"></canvas>
+            <div style="font-size: 0.9rem;">Score: <span id="score" style="color: #00ff88;">0</span></div>
+        </div>
+
+        <a href="index.html" class="back-btn">Назад</a>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('game-canvas');
+        const ctx = canvas.getContext('2d');
+        const scoreEl = document.getElementById('score');
+        let score = 0;
+        let target = { x: 140, y: 75, r: 12 };
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.arc(target.x, target.y, target.r, 0, Math.PI * 2);
+            ctx.fillStyle = "#00ff88";
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = "#00ff88";
+            ctx.fill();
+            ctx.closePath();
         }
-    }
 
-    function resizeCanvas() {
-        canvas.width = gameSection.offsetWidth;
-        canvas.height = gameSection.offsetHeight;
-        basket.y = canvas.height - 40;
-        basket.x = (canvas.width / 2) - (basket.w / 2);
-    }
-
-    function resetGame() {
-        score = 0;
-        items = [];
-        updateScore();
-    }
-
-    function updateScore() {
-        document.getElementById('score-board').innerText = 'SCORE: ' + score;
-    }
-
-    function spawnItem() {
-        if (Math.random() < 0.035) {
-            const isVirus = Math.random() < 0.3;
-            items.push({
-                x: Math.random() * (canvas.width - 25),
-                y: -30,
-                speed: 3 + (score / 15),
-                isVirus: isVirus
-            });
-        }
-    }
-
-    function update() {
-        if (!gameActive) return;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        spawnItem();
-
-        ctx.fillStyle = '#ff9100';
-        ctx.fillRect(basket.x, basket.y, basket.w, basket.h);
-
-        items.forEach((item, i) => {
-            item.y += item.speed;
-            ctx.font = '24px Arial';
-            ctx.fillText(item.isVirus ? '👾' : '⚙️', item.x, item.y);
-
-            if (item.y > basket.y - 10 && item.y < basket.y + 10 && 
-                item.x > basket.x - 10 && item.x < basket.x + basket.w) {
-                if (item.isVirus) {
-                    alert('SYSTEM OVERLOAD! Твій рахунок: ' + score);
-                    toggleGame();
-                } else {
-                    score++;
-                    updateScore();
-                    items.splice(i, 1);
-                }
+        canvas.addEventListener('mousedown', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const dist = Math.hypot(x - target.x, y - target.y);
+            if (dist < target.r) {
+                score++;
+                scoreEl.textContent = score;
+                target.x = Math.random() * (canvas.width - 40) + 20;
+                target.y = Math.random() * (canvas.height - 40) + 20;
+                draw();
             }
-            if (item.y > canvas.height) items.splice(i, 1);
         });
-        requestAnimationFrame(update);
-    }
 
-    // --- ФУНКЦІЯ КЕРУВАННЯ (СПІЛЬНА ДЛЯ ПК ТА ТЕЛЕФОНУ) ---
-    function moveBasket(clientX) {
-        const rect = canvas.getBoundingClientRect();
-        let newX = clientX - rect.left - basket.w / 2;
-        if (newX >= 0 && newX <= canvas.width - basket.w) {
-            basket.x = newX;
-        }
-    }
-
-    // Слухаємо мишку (ПК)
-    gameSection.addEventListener('mousemove', (e) => {
-        if (gameActive) moveBasket(e.clientX);
-    });
-
-    // Слухаємо тач (Телефон)
-    gameSection.addEventListener('touchmove', (e) => {
-        if (gameActive) {
-            moveBasket(e.touches[0].clientX);
-            e.preventDefault();
-        }
-    }, { passive: false });
-
-    window.onresize = resizeCanvas;
-</script>
+        // Малювання першої цілі
+        draw();
+    </script>
+</body>
+</html>
