@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Snoopy Service - Послуги</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
         
@@ -24,7 +24,7 @@
             background-attachment: fixed; 
             background-size: cover;
             background-blend-mode: overlay;
-            color: #e0e0e0; 
+            color: #ffffff; /* Максимально білий текст за замовчуванням */
             font-family: 'Segoe UI', sans-serif;
             margin: 0; 
             padding: 20px; 
@@ -43,11 +43,11 @@
             font-family: 'Orbitron', sans-serif; 
             color: #00d4ff;
             text-transform: uppercase; 
-            font-size: 1.2rem; 
+            font-size: 1.25rem; 
             letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(0, 212, 255, 0.7);
+            text-shadow: 0 0 12px #00d4ff;
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .neon-logo span {
@@ -56,118 +56,97 @@
         }
         @keyframes pulse-text {
             0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.02); opacity: 0.8; }
+            50% { transform: scale(1.02); opacity: 0.9; }
         }
 
-        .info-bar { display: flex; flex-direction: column; gap: 8px; }
+        .info-bar { display: flex; flex-direction: column; gap: 10px; }
 
         .info-item { 
             font-family: 'Orbitron', sans-serif; 
-            font-size: 0.85rem; 
-            padding: 8px 15px;
-            background: rgba(0, 0, 0, 0.7);
+            font-size: 0.9rem; 
+            font-weight: 700;
+            padding: 10px 16px;
+            background: #0a0a0a; /* Повністю непрозорий темний фон для контрасту */
             border-radius: 12px;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             width: fit-content;
             white-space: nowrap;
         }
 
-        .clock { border: 1px solid rgba(160, 32, 240, 0.6); color: #d16dff; text-shadow: 0 0 8px #a020f0; }
-        .weather { border: 1px solid #00ff00; color: #00ff00; text-shadow: 0 0 8px rgba(0, 255, 0, 0.5); }
-        .currency { border: 1px solid #ffae00; color: #ffae00; text-shadow: 0 0 8px rgba(255, 174, 0, 0.5); }
+        /* МАКСИМАЛЬНА ЯСКРАВІСТЬ ДЛЯ МОБІЛОК */
+        .clock { border: 1px solid #d16dff; color: #d16dff; text-shadow: 0 0 8px #a020f0; }
+        .weather { border: 2px solid #00ff00; color: #00ff00; text-shadow: 0 0 10px #00ff00; }
+        .currency { border: 1px solid #ffae00; color: #ffae00; text-shadow: 0 0 8px #ffae00; }
 
         .main-layout { display: flex; flex-wrap: wrap; gap: 20px; width: 100%; max-width: 1000px; position: relative; z-index: 20; }
         
         .card { 
-            background: rgba(0, 0, 0, 0.8); 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
+            background: rgba(0, 0, 0, 0.85); 
+            border: 1px solid rgba(255, 255, 255, 0.15); 
             border-radius: 25px; 
             padding: 25px; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8); 
-            backdrop-filter: blur(15px);
-            transition: transform 0.3s ease, border-color 0.3s ease;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.9); 
+            backdrop-filter: blur(20px);
+            transition: transform 0.3s ease;
         }
-        .card:hover { transform: translateY(-5px); border-color: rgba(0, 212, 255, 0.3); }
 
         .price-container { flex: 2; min-width: 300px; }
         .photo-aside { flex: 1.5; min-width: 280px; text-align: center; }
 
-        h2 { font-family: 'Orbitron', sans-serif; color: #ff9100; margin-top: 0; text-transform: uppercase; font-size: 1.1rem; }
+        h2 { font-family: 'Orbitron', sans-serif; color: #ffae00; margin-top: 0; text-transform: uppercase; font-size: 1.2rem; margin-bottom: 20px; }
         
         .service-item { 
-            display: flex; justify-content: space-between; padding: 15px 0; 
-            border-bottom: 1px solid rgba(255,255,255,0.05); align-items: center; 
+            display: flex; justify-content: space-between; padding: 18px 0; 
+            border-bottom: 1px solid rgba(255,255,255,0.1); align-items: center; 
         }
 
+        /* ЯСКРАВІ ТА ЖИРНІ ЦІНИ */
         .price { 
             color: #00ff00; 
             font-family: 'Orbitron', sans-serif; 
-            font-weight: 800; 
-            font-size: 1.2rem;
-            text-shadow: 0 0 10px rgba(0, 255, 0, 0.3); 
+            font-weight: 900; 
+            font-size: 1.3rem;
+            text-shadow: 0 0 12px #00ff00;
         }
 
-        .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
         .work-img { 
-            width: 100%; height: 140px; object-fit: cover; border-radius: 12px; 
-            border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: 0.3s; 
+            width: 100%; height: 150px; object-fit: cover; border-radius: 12px; 
+            border: 1px solid rgba(255,255,255,0.2); cursor: pointer; transition: 0.3s; 
         }
-        .work-img:hover { border-color: #ff9100; transform: scale(1.05); }
+        .work-img:hover { border-color: #ffae00; transform: scale(1.05); }
         
-        /* КНОПКИ З ЕФЕКТОМ НАВЕДЕННЯ */
-        .btn-group { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 400px; margin-top: 25px; position: relative; z-index: 20; }
+        .btn-group { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 400px; margin-top: 30px; position: relative; z-index: 20; }
         
         .btn { 
-            padding: 15px; 
+            padding: 18px; 
             border-radius: 40px; 
             text-align: center; 
             text-decoration: none; 
             font-family: 'Orbitron', sans-serif; 
-            font-size: 0.85rem; 
-            font-weight: bold; 
+            font-size: 0.9rem; 
+            font-weight: 900; 
             cursor: pointer; 
             border: 2px solid; 
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
             text-transform: uppercase;
-            position: relative;
-            overflow: hidden;
         }
 
-        .back-btn { 
-            color: #ff9100; 
-            border-color: #ff9100; 
-            background: rgba(255, 145, 0, 0.05); 
-        }
-        .back-btn:hover { 
-            background: rgba(255, 145, 0, 0.15); 
-            transform: translateY(-3px); 
-            box-shadow: 0 0 20px rgba(255, 145, 0, 0.4); 
-        }
+        .back-btn { color: #ffae00; border-color: #ffae00; background: rgba(255, 174, 0, 0.05); }
+        .back-btn:hover { background: rgba(255, 174, 0, 0.2); transform: translateY(-3px); box-shadow: 0 0 25px #ffae00; }
 
-        .game-btn { 
-            color: #ff0055; 
-            border-color: #ff0055; 
-            background: rgba(255, 0, 85, 0.05); 
-        }
-        .game-btn:hover { 
-            background: rgba(255, 0, 85, 0.15); 
-            transform: translateY(-3px); 
-            box-shadow: 0 0 20px rgba(255, 0, 85, 0.4); 
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
+        .game-btn { color: #ff0055; border-color: #ff0055; background: rgba(255, 0, 85, 0.05); }
+        .game-btn:hover { background: rgba(255, 0, 85, 0.2); transform: translateY(-3px); box-shadow: 0 0 25px #ff0055; }
 
         #imgModal { 
             display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.9); align-items: center; justify-content: center; backdrop-filter: blur(10px); 
+            background: rgba(0,0,0,0.95); align-items: center; justify-content: center; backdrop-filter: blur(15px); 
         }
-        #imgModal img { max-width: 90%; max-height: 90%; border: 2px solid #ff9100; border-radius: 10px; }
+        #imgModal img { max-width: 90%; max-height: 90%; border: 2px solid #ffae00; border-radius: 10px; }
 
-        #game-section { display: none; margin-top: 20px; width: 320px; height: 400px; background: #000; border: 1px solid #ff0055; border-radius: 20px; position: relative; overflow: hidden; touch-action: none; z-index: 20; }
+        #game-section { display: none; margin-top: 20px; width: 320px; height: 400px; background: #000; border: 2px solid #ff0055; border-radius: 20px; position: relative; overflow: hidden; touch-action: none; z-index: 20; }
         #gameCanvas { width: 100%; height: 100%; }
         #score { position: absolute; top: 10px; left: 15px; color: #00ff00; font-family: 'Orbitron', sans-serif; z-index: 10; }
     </style>
@@ -241,7 +220,6 @@
 
         async function getCurrency() {
             try {
-                // Використовуємо API НБУ для надійності
                 const res = await fetch('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json');
                 const data = await res.json();
                 const usd = data.find(c => c.cc === 'USD');
@@ -269,7 +247,7 @@
             if(!active) return;
             ctx.clearRect(0, 0, 320, 400);
             if(Math.random() < 0.035) items.push({ x: Math.random()*290, y: -20, bad: Math.random() < 0.2 });
-            ctx.fillStyle = "#ff9100";
+            ctx.fillStyle = "#ffae00";
             ctx.fillRect(basket.x, 375, basket.w, 10);
             for(let i = items.length - 1; i >= 0; i--) {
                 let it = items[i];
