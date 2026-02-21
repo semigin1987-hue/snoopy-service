@@ -84,15 +84,12 @@
         h2 { font-family: 'Orbitron', sans-serif; color: #ff9100; margin-top: 0; text-transform: uppercase; font-size: 1.1rem; }
         .service-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); align-items: center; }
 
-        /* ЯСКРАВО-ЗЕЛЕНІ ЦІНИ БЕЗ РОЗМИТТЯ */
         .price { 
             color: #00ff00; 
             font-family: 'Orbitron', sans-serif; 
             font-weight: 800; 
             font-size: 1.1rem;
-            /* Прибираємо тінь для максимальної чіткості */
             text-shadow: none; 
-            /* Додаємо легку темну обводку для контрасту */
             -webkit-text-stroke: 0.2px rgba(0,0,0,0.5);
         }
 
@@ -138,10 +135,14 @@
         <div class="card photo-aside">
             <h2>PHOTO</h2>
             <div class="gallery">
-                <img src="phot01.jpg" class="work-img" onclick="showImg(this.src)">
-                <img src="photo777.png" class="work-img" onclick="showImg(this.src)" onerror="this.src='phot01.jpg'">
-                <img src="photo888.jpg" class="work-img" onclick="showImg(this.src)" onerror="this.src='phot01.jpg'">
-                <img src="gemini1.png" class="work-img" onclick="showImg(this.src)" onerror="this.src='phot01.jpg'">
+                <img src="https://images.weserv.nl?url=semigin1987-hue.github.io/snoopy-service/phot01.jpg&w=400&output=webp" 
+                     class="work-img" loading="lazy" decoding="async" onclick="showImg(this.src)">
+                <img src="https://images.weserv.nl?url=semigin1987-hue.github.io/snoopy-service/photo777.png&w=400&output=webp" 
+                     class="work-img" loading="lazy" decoding="async" onclick="showImg(this.src)" onerror="this.src='phot01.jpg'">
+                <img src="https://images.weserv.nl?url=semigin1987-hue.github.io/snoopy-service/photo888.jpg&w=400&output=webp" 
+                     class="work-img" loading="lazy" decoding="async" onclick="showImg(this.src)" onerror="this.src='phot01.jpg'">
+                <img src="https://images.weserv.nl?url=semigin1987-hue.github.io/snoopy-service/gemini1.png&w=400&output=webp" 
+                     class="work-img" loading="lazy" decoding="async" onclick="showImg(this.src)" onerror="this.src='phot01.jpg'">
             </div>
         </div>
     </div>
