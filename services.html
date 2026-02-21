@@ -8,7 +8,6 @@
     <style>
         * { box-sizing: border-box; }
         
-        /* ПЛАВНА ПОЯВА СТОРІНКИ */
         @keyframes fadeInPage {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -34,21 +33,12 @@
             align-items: center; 
             min-height: 100vh;
             overflow-x: hidden;
-            /* ТЕХНІЧНИЙ КУРСОР ТА АНІМАЦІЯ */
             cursor: crosshair;
             animation: fadeInPage 0.8s ease-out;
         }
 
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(120deg, rgba(255,255,255,0.03) 0%, transparent 50%, rgba(255,255,255,0.01) 100%);
-            pointer-events: none;
-            z-index: 10;
-        }
-
         .header-left { align-self: flex-start; margin-bottom: 25px; position: relative; z-index: 20; }
+        
         .neon-logo { 
             font-family: 'Orbitron', sans-serif; 
             color: #00d4ff;
@@ -56,59 +46,69 @@
             font-size: 1.2rem; 
             letter-spacing: 2px;
             text-shadow: 0 0 10px rgba(0, 212, 255, 0.7);
-            animation: pulse-light 2s infinite ease-in-out;
             display: block;
-        }
-        @keyframes pulse-light {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.02); }
+            margin-bottom: 10px;
         }
 
-        .clock { 
-            color: #a020f0; 
+        /* Пульсує тільки текст, не рухаючи сусідні блоки */
+        .neon-logo span {
+            display: inline-block;
+            animation: pulse-text 2s infinite ease-in-out;
+        }
+        @keyframes pulse-text {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.02); opacity: 0.8; }
+        }
+
+        .info-bar { display: flex; flex-direction: column; gap: 8px; }
+
+        .info-item { 
             font-family: 'Orbitron', sans-serif; 
             font-size: 0.85rem; 
-            margin-top: 10px;
-            padding: 6px 15px;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(160, 32, 240, 0.4);
+            padding: 8px 15px;
+            background: rgba(0, 0, 0, 0.7); /* Більш насичений фон */
             border-radius: 12px;
-            display: inline-block;
-            text-shadow: 0 0 8px rgba(160, 32, 240, 0.8);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            width: fit-content;
+            white-space: nowrap;
         }
+
+        .clock { border: 1px solid rgba(160, 32, 240, 0.6); color: #d16dff; text-shadow: 0 0 8px #a020f0; }
+        .weather { border: 1px solid #00ff00; color: #00ff00; text-shadow: 0 0 8px rgba(0, 255, 0, 0.5); }
+        .currency { border: 1px solid #ffae00; color: #ffae00; text-shadow: 0 0 8px rgba(255, 174, 0, 0.5); }
 
         .main-layout { display: flex; flex-wrap: wrap; gap: 20px; width: 100%; max-width: 1000px; position: relative; z-index: 20; }
         
-        /* ЕФЕКТ НАХИЛУ КАРТОК */
         .card { 
-            background: rgba(0, 0, 0, 0.75); 
+            background: rgba(0, 0, 0, 0.8); 
             border: 1px solid rgba(255, 255, 255, 0.1); 
             border-radius: 25px; 
             padding: 25px; 
             box-shadow: 0 20px 40px rgba(0,0,0,0.8); 
             backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            transition: transform 0.3s ease;
         }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 25px 50px rgba(160, 32, 240, 0.15);
-            border-color: rgba(0, 212, 255, 0.3);
-        }
+        .card:hover { transform: translateY(-5px); border-color: rgba(0, 212, 255, 0.3); }
 
         .price-container { flex: 2; min-width: 300px; }
         .photo-aside { flex: 1.5; min-width: 280px; text-align: center; }
 
         h2 { font-family: 'Orbitron', sans-serif; color: #ff9100; margin-top: 0; text-transform: uppercase; font-size: 1.1rem; }
-        .service-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); align-items: center; }
+        
+        .service-item { 
+            display: flex; justify-content: space-between; padding: 15px 0; 
+            border-bottom: 1px solid rgba(255,255,255,0.05); align-items: center; 
+        }
 
+        /* ЯСКРАВІ ЦІНИ */
         .price { 
             color: #00ff00; 
             font-family: 'Orbitron', sans-serif; 
             font-weight: 800; 
-            font-size: 1.1rem;
-            text-shadow: none; 
-            -webkit-text-stroke: 0.2px rgba(0,0,0,0.5);
+            font-size: 1.2rem;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.3); 
         }
 
         .gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
@@ -118,35 +118,19 @@
         }
         .work-img:hover { border-color: #ff9100; transform: scale(1.05); }
         
-        /* ПОКРАЩЕНЕ МОДАЛЬНЕ ВІКНО */
         #imgModal { 
-            display: none; 
-            position: fixed; 
-            z-index: 3000; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.9); 
-            align-items: center; 
-            justify-content: center; 
-            backdrop-filter: blur(10px); 
-            cursor: zoom-out;
+            display: none; position: fixed; z-index: 3000; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.9); align-items: center; justify-content: center; backdrop-filter: blur(10px); 
         }
-        #imgModal img { 
-            max-width: 90%; 
-            max-height: 90%; 
-            border: 2px solid #ff9100; 
-            border-radius: 10px; 
-            box-shadow: 0 0 30px rgba(255, 145, 0, 0.3);
-        }
+        #imgModal img { max-width: 90%; max-height: 90%; border: 2px solid #ff9100; border-radius: 10px; }
 
         .btn-group { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 400px; margin-top: 25px; position: relative; z-index: 20; }
         .btn { padding: 15px; border-radius: 40px; text-align: center; text-decoration: none; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; font-weight: bold; cursor: pointer; border: 2px solid; transition: 0.3s; text-transform: uppercase; }
         .back-btn { color: #ff9100; border-color: #ff9100; background: rgba(255, 145, 0, 0.05); }
         .game-btn { color: #ff0055; border-color: #ff0055; background: rgba(255, 0, 85, 0.05); }
-        .btn:hover { background: rgba(255,255,255,0.1); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
 
         #game-section { display: none; margin-top: 20px; width: 320px; height: 400px; background: #000; border: 1px solid #ff0055; border-radius: 20px; position: relative; overflow: hidden; touch-action: none; z-index: 20; }
-        #gameCanvas { width: 100%; height: 100%; cursor: none; }
+        #gameCanvas { width: 100%; height: 100%; }
         #score { position: absolute; top: 10px; left: 15px; color: #00ff00; font-family: 'Orbitron', sans-serif; z-index: 10; }
     </style>
 </head>
@@ -155,8 +139,12 @@
     <div id="imgModal" onclick="this.style.display='none'"><img id="fullImg" src=""></div>
 
     <div class="header-left">
-        <div class="neon-logo">Snoopy Digital Service</div>
-        <div id="live-clock" class="clock">Завантаження...</div>
+        <div class="neon-logo"><span>Snoopy Digital Service</span></div>
+        <div class="info-bar">
+            <div id="live-clock" class="info-item clock">Завантаження...</div>
+            <div id="weather" class="info-item weather">☀️ Вишневе: ...°C</div>
+            <div id="currency" class="info-item currency">💵 USD: --.-- | EUR: --.--</div>
+        </div>
     </div>
 
     <div class="main-layout">
@@ -171,14 +159,10 @@
         <div class="card photo-aside">
             <h2>PHOTO</h2>
             <div class="gallery">
-                <img src="https://images.weserv.nl?url=semigin1987-hue.github.io/snoopy-service/phot01.jpg&w=400&output=webp" 
-                     class="work-img" loading="lazy" decoding="async" onclick="showImg(this.src)">
-                <img src="https://images.weserv.nl?url=semigin1987-hue.github.io/snoopy-service/photo777.png&w=400&output=webp" 
-                     class="work-img" loading="lazy" decoding="async" onclick="showImg(this.src)" onerror="this.src='phot01.jpg'">
-                <img src="https://images.weserv.nl?url=semigin1987-hue.github.io/snoopy-service/photo888.jpg&w=400&output=webp" 
-                     class="work-img" loading="lazy" decoding="async" onclick="showImg(this.src)" onerror="this.src='phot01.jpg'">
-                <img src="https://images.weserv.nl?url=semigin1987-hue.github.io/snoopy-service/gemini1.png&w=400&output=webp" 
-                     class="work-img" loading="lazy" decoding="async" onclick="showImg(this.src)" onerror="this.src='phot01.jpg'">
+                <img src="https://images.weserv.nl?url=semigin1987-hue.github.io/snoopy-service/phot01.jpg&w=400&output=webp" class="work-img" onclick="showImg(this.src)">
+                <img src="https://images.weserv.nl?url=semigin1987-hue.github.io/snoopy-service/photo777.png&w=400&output=webp" class="work-img" onclick="showImg(this.src)" onerror="this.src='phot01.jpg'">
+                <img src="https://images.weserv.nl?url=semigin1987-hue.github.io/snoopy-service/photo888.jpg&w=400&output=webp" class="work-img" onclick="showImg(this.src)" onerror="this.src='phot01.jpg'">
+                <img src="https://images.weserv.nl?url=semigin1987-hue.github.io/snoopy-service/gemini1.png&w=400&output=webp" class="work-img" onclick="showImg(this.src)" onerror="this.src='phot01.jpg'">
             </div>
         </div>
     </div>
@@ -208,6 +192,29 @@
         setInterval(updateClock, 1000); 
         updateClock();
 
+        async function getWeather() {
+            try {
+                const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=50.39&longitude=30.37&current_weather=true');
+                const data = await res.json();
+                document.getElementById('weather').innerHTML = `☀️ Вишневе: ${Math.round(data.current_weather.temperature)}°C`;
+            } catch { document.getElementById('weather').innerText = "☀️ Погода..."; }
+        }
+        getWeather();
+
+        async function getCurrency() {
+            try {
+                const res = await fetch('https://api.monobank.ua/bank/currency');
+                const data = await res.json();
+                const usd = data.find(c => c.currencyCodeA === 840 && c.currencyCodeB === 980);
+                const eur = data.find(c => c.currencyCodeA === 978 && c.currencyCodeB === 980);
+                document.getElementById('currency').innerHTML = `💵 USD: ${usd.rateSell.toFixed(2)} | EUR: ${eur.rateSell.toFixed(2)}`;
+            } catch {
+                document.getElementById('currency').innerHTML = "💵 Курс тимчасово недоступний";
+            }
+        }
+        getCurrency();
+
+        // Game Logic
         const cvs = document.getElementById('gameCanvas');
         const ctx = cvs.getContext('2d');
         const scoreEl = document.getElementById('score');
@@ -216,10 +223,7 @@
         function toggleGame() {
             active = !active;
             document.getElementById('game-section').style.display = active ? 'block' : 'none';
-            if(active) { 
-                cvs.width = 320; cvs.height = 400; score = 0; scoreEl.innerText = "SCORE: 0"; items = []; 
-                requestAnimationFrame(gameLoop); 
-            }
+            if(active) { cvs.width = 320; cvs.height = 400; score = 0; scoreEl.innerText = "SCORE: 0"; items = []; requestAnimationFrame(gameLoop); }
         }
 
         function gameLoop() {
@@ -249,9 +253,7 @@
         }
 
         window.addEventListener('mousemove', e => { if(active) move(e.clientX); });
-        cvs.addEventListener('touchmove', e => {
-            if(active) { move(e.touches[0].clientX); e.preventDefault(); }
-        }, {passive: false});
+        cvs.addEventListener('touchmove', e => { if(active) { move(e.touches[0].clientX); e.preventDefault(); } }, {passive: false});
     </script>
 </body>
 </html>
